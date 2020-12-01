@@ -9,7 +9,13 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^0.2.4",
+    "redux": "latest",
+    "redux-thunk": "latest",
+    "antd": "latest",
+    "react-redux": "latest",
+    "react-router-dom": "latest",
+    "react-loadable": "latest"
   },
   "scripts": {
     "start": "react-scripts start",
