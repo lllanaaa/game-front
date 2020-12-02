@@ -1,7 +1,9 @@
 import {combineReducers} from 'redux'
 
-const reducer = combineReducers({
+import { banner } from './banner'
 
+const reducer = combineReducers({
+    banner
 
 });
 

@@ -5,8 +5,8 @@ class Header extends Component{
 
     render(){
         return (
-            <div className='header-wrapper' style={{ }}>
-                <TopPart loginData={this.props.loginData}  loginDataFunc={this.props.loginDataFunc} />
+            <div className='header-wrapper'>
+                <TopPart loginData={this.props.loginData} loginDataFunc={this.props.loginDataFunc} />
             </div>
         )
     }

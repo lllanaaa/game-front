@@ -19,7 +19,7 @@ class AllRoute extends Component {
                     <Switch>
                         <Route path='/' exact component={ dynamicIndex } />
 
-                        <Route path='*'  component={dynamic404} />
+                        <Route path='*'  component={ dynamic404 } />
                     </Switch>
                 </Router>
             </Layout>
