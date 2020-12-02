@@ -1,0 +1,15 @@
+.leftArrow {
+  position: absolute;
+  z-index: 100;
+  left: 30px;
+  top: 40%;
+  cursor: pointer;
+}
+
+.rightArrow {
+  position: absolute;
+  z-index: 100;
+  right: 30px;
+  top: 40%;
+  cursor: pointer;
+}

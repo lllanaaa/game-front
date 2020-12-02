@@ -1,35 +1,53 @@
 import  React, { Component } from 'react';
-import { Carousel, Spin,Icon,Row,Col  } from 'antd';
+import { Carousel, Spin, Row, Col  } from 'antd';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css'
+import { getSongBanner } from '../../api';
 import { withRouter } from 'react-router-dom'
-import './indexBanner.scss'
+import './index.scss'
 
-class IndexBanner extends Component {
+
+import banner1 from '../../source/game_pic/banner_pic/1.jpg'
+import banner2 from '../../source/game_pic/banner_pic/2.jpg'
+import banner3 from '../../source/game_pic/banner_pic/3.jpg'
+import banner4 from '../../source/game_pic/banner_pic/4.jpg'
+import banner5 from '../../source/game_pic/banner_pic/5.jpg'
+import banner6 from '../../source/game_pic/banner_pic/6.jpg'
+
+
+class Banner extends Component {
 
     constructor(props){
         super(props);
         this.state={
-            indexBanners:0,//当前显示轮播图的引索,默认为第一张
-            bannerBgArr:[]//轮播图图片,由于没有背景图的接口数据,这里用图片加上模糊度去模拟
+            indexBanner: 0,//当前显示轮播图的引索,默认为第一张
+            banners: [
+                {id: 1, picUrl: banner1, name: "1"},
+                {id: 2, picUrl: banner2, name: "2"},
+                {id: 3, picUrl: banner3, name: "3"},
+                {id: 4, picUrl: banner4, name: "4"},
+                {id: 5, picUrl: banner5, name: "5"},
+                {id: 6, picUrl: banner6, name: "6"},
+            ]//轮播图图片,由于没有背景图的接口数据,这里用图片加上模糊度去模拟
         }
     }
 
     componentDidMount() {
-        getSongBanner().then( (res)=>{
-            //请求轮播图数据,通过getBannerFunc函数给回到
-            if(res.data.code === 200) {
-                console.log(res.data)
-                this.state.bannerBgArr = [...res.data.songs];
-            }else {
-                console.log("你的请求有错误.")
-            }
-        }).catch( (error)=>{
-            console.log( "错位为:",error )
-        })
+        // getSongBanner().then( (res)=>{
+        //     //请求轮播图数据,通过getBannerFunc函数给回到
+        //     if(res.data.code === 200) {
+        //         console.log(res.data);
+        //         this.state.bannerBgArr = [...res.data.songs];
+        //     }else{
+        //         console.log("请求失败")
+        //     }
+        // }).catch( (error)=>{
+        // })
+
     }
 
-    handleClick = (targetId, type) => {
-        this.props.history.push(`/song?id=${targetId}`)
+    handleClick = (targetId) => {
+        this.props.history.push(`/game?id=${targetId}`)
     };
 
     prevImg = () => {
@@ -44,16 +62,14 @@ class IndexBanner extends Component {
 
     afterChange = (current) => {
         this.setState({
-            indexBanners: current
+            indexBanner: current
         })
     };
 
     render() {
-        //判断获取到的数据是否为空,不为空则渲染内容,也就是渲染轮播图,为空则渲染null
-
-        const banners = this.props.homeBannerData.length > 0
+        const banners = this.state.banners.length > 0
             ?
-            this.props.homeBannerData.map( (item,index) => {
+            this.state.banners.map( (item, index) => {
                 return (
                     <div className={`indexBanner`} key={item.picUrl} style={{height:"300px"}}>
                         <div>
@@ -63,7 +79,7 @@ class IndexBanner extends Component {
                                     <img
                                         src={item.picUrl}
                                         alt={item.name}
-                                        onClick={ ()=>this.handleClick(item.id, item.type) }
+                                        onClick={ ()=>this.handleClick(item.id) }
                                         style={{ width:"730px",height:"300px",margin:'0 auto',cursor:"pointer" }}
                                     />
                                     :
@@ -77,7 +93,6 @@ class IndexBanner extends Component {
             <Spin />;
 
 
-
         return (
             <div style={{ position:"relative",marginTop:"30px",minWidth:"990px"}} className={`indexBanner${this.state.indexBanners}`}>
                 <Row>
@@ -86,7 +101,7 @@ class IndexBanner extends Component {
                         <div style={{ height:"336px" }}>
 
                             <div className='leftArrow' onClick={ ()=>this.prevImg() }>
-                                <Icon type="left" style={{ fontSize:"40px",color:"#fff",width:"40px",height:"70px" }} />
+                                <LeftOutlined style={{ fontSize:"40px",color:"#fff",width:"40px",height:"70px" }}/>
                             </div>
 
                             <Carousel
@@ -102,7 +117,7 @@ class IndexBanner extends Component {
                             </Carousel>
 
                             <div className='rightArrow' onClick={ ()=>this.nextImg() }>
-                                <Icon type="right" style={{ fontSize:"40px",color:"#fff",width:"40px",height:"70px" }}/>
+                                <RightOutlined style={{ fontSize:"40px",color:"#fff",width:"40px",height:"70px" }}/>
                             </div>
 
                         </div>
@@ -115,4 +130,4 @@ class IndexBanner extends Component {
 
 }
 
-export default withRouter(IndexBanner)
+export default withRouter(Banner)
