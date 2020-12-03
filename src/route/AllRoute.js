@@ -18,6 +18,7 @@ class AllRoute extends Component {
             <Router>
                 <Switch>
                     <Route path='/' exact component={ dynamicIndex } />
+                    <Route path='/shoppingMall' exact component={ dynamicIndex } />
                     <Route path='/game'  component={ dynamicGame } />
                     <Route path='*'  component={ dynamic404 } />
                 </Switch>

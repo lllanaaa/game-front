@@ -17,7 +17,7 @@ class Index extends Component {
                 <div className='banner' style={{ marginTop:"20vh", backgroundImage: `url(${bg1})`}}>
                     <Banner />
                 </div>
-                <div className='content'>
+                <div className='content' style={{ marginTop:"20px", marginBottom:"20px" }}>
                     <Content />
                 </div>
                 <div className='footer'>
