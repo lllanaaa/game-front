@@ -1,8 +1,12 @@
 import  React, { Component } from 'react';
-import { Row, Col } from 'antd'
+import { Row, Col, Button, Spin } from 'antd'
 import 'antd/dist/antd.css';
 import Header from "../header";
 import Footer from "../footer";
+import { getGameDetail, addUserList } from '../../api';
+import { Player, ControlBar } from 'video-react';
+import 'video-react/dist/video-react.css';
+
 
 import pic from '../../source/game_pic/content_pic/1.jpg'
 
@@ -22,6 +26,7 @@ class Game extends Component {
             discount: 0.2,
             reviewNum: 10,
             reviews: [{id: 1, gameId: 1, content: "评论1", userId: 1, userName: "玩家1", userPicUrl: "", time: ""}, {id: 2, gameId: 1, content: "评论2", userId: 2, userName: "玩家2", userPicUrl: "", time: ""}],
+            reviewContent: "好评如潮",
             mvUrl: "",
         }
     }
@@ -30,26 +35,49 @@ class Game extends Component {
 
         const gameId = parseInt(this.props.location.search.match(/\d+/gi).toString());
 
-        this.setState({
-            gameId
-        })
+        getGameDetail(gameId).then( (res)=>{
+            if(res.data.code === 200) {
+                this.setState({
+                    gameId: res.data.data,
+                    gameName: res.data.data,
+                    publishTime: res.data.data,
+                    publisher: res.data.data,
+                    picUrl: res.data.data,
+                    labels: res.data.data,
+                    price: res.data.data,
+                    description: res.data.data,
+                    discount: res.data.data,
+                    reviewNum: res.data.data,
+                    reviews:  res.data.data,
+                    reviewContent: res.data.data,
+                    mvUrl: res.data.data,
+                })
+            }else{
+                console.log("请求失败")
+            }
+        }).catch( (error)=>{
+        });
 
-        // getSongBanner().then( (res)=>{
-        //     //请求轮播图数据,通过getBannerFunc函数给回到
-        //     if(res.data.code === 200) {
-        //         console.log(res.data);
-        //         this.state.bannerBgArr = [...res.data.songs];
-        //     }else{
-        //         console.log("请求失败")
-        //     }
-        // }).catch( (error)=>{
-        // })
     }
+
+    onClickAdd = () => {
+
+        const gameId = parseInt(this.props.location.search.match(/\d+/gi).toString());
+        const userId = JSON.parse(localStorage.getItem('loginObj')).userId
+
+        addUserList(userId, gameId).then( (res)=>{
+            if(res.data.code === 200) {
+                console.log("请求成功")
+            }else{
+                console.log("请求失败")
+            }
+        }).catch( (error)=>{
+        });
+
+    };
 
 
     render() {
-
-        // const picUrl = require(this.state.picUrl);
 
         const showReviews =  this.state.reviews.length > 0
             ?
@@ -78,41 +106,86 @@ class Game extends Component {
                     <Header />
                 </div>
 
-                <div style={{marginTop: "100px"}}>
+                <div>
                     <Row>
-                        {/*图片或视频*/}
+                        <Col span={2}></Col>
                         <Col span={12}>
-                            <div className='song-logo' style={{marginLeft: "100px"}}>
-                                <div className='song-logo-img'>
-                                    <img src={pic} alt=""/>
-                                </div>
-                            </div>
-                        </Col>
-                        {/*游戏简介*/}
-                        <Col span={12} style={{ backgroundColor:"#fff", borderTop:"none",paddingBottom:"90px" }}>
-                            <div className='song-content-rightHeader'>
+                            <div className='song-content-rightHeader' style={{marginTop: 30}}>
                                 <span className='song-content-rightHeader-name'>{this.state.gameName}</span>
                             </div>
-                            <div className='song-content-singer' style={{marginTop:"20px"}}>
-                                <span style={{ fontSize:"12px" }}>发行商:</span>
-                                <span style={{ marginLeft:"5px", fontSize:"12px", color:"#2273C2" }}>{this.state.publisher}</span>
-                            </div>
-                            <div className='song-content-belongAlbum'>
-                                <span style={{ fontSize:"12px" }}>发行时间:</span>
-                                <span style={{marginLeft:"5px",fontSize:"12px",color:"#2273C2" }}>{this.state.publishTime}</span>
-                            </div>
-                            <div className='song-content-label'>
-                                <span style={{ fontSize:"12px" }}>标签:</span>
-                                {this.state.labels.map( (item) => {
-                                    return(
-                                        <span style={{marginLeft:"5px",fontSize:"12px",color:"#2273C2" }}>{item}</span>
-                                    )
-                                })}
-                            </div>
                         </Col>
+                        <Col span={10}></Col>
+                    </Row>
+                </div>
 
+                <div style={{marginTop: "100px"}}>
+                    <Row>
+                        <Col span={2}></Col>
+                        <Col span={12}>
+                            <div style={{height: 420, width:700}}>
+                                <Player>
+                                    <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4" />
+                                </Player>
+                            </div>
+
+                        </Col>
+                        <Col span={6}>
+                            <Row>
+                                <div className='song-logo-img'>
+                                    <img src={pic} alt="" style={{width: "300px"}}/>
+                                </div>
+                            </Row>
+                            <Row>
+                                <div className='description'>
+                                    描述内容
+                                </div>
+                            </Row>
+                            <Row>
+                                <div className='song-content-singer' style={{marginTop:"50px"}}>
+                                    <span style={{ fontSize:"12px" }}>评测内容:</span>
+                                    <span style={{ marginLeft:"5px", fontSize:"12px", color:"#2273C2" }}>{this.state.reviewContent}</span>
+                                </div>
+                            </Row>
+                            <Row>
+                                <div className='song-content-singer' style={{marginTop:"50px"}}>
+                                    <span style={{ fontSize:"12px" }}>发行商:</span>
+                                    <span style={{ marginLeft:"5px", fontSize:"12px", color:"#2273C2" }}>{this.state.publisher}</span>
+                                </div>
+                            </Row>
+                            <Row>
+                                <div className='song-content-belongAlbum'>
+                                    <span style={{ fontSize:"12px" }}>发行时间:</span>
+                                    <span style={{marginLeft:"5px",fontSize:"12px",color:"#2273C2" }}>{this.state.publishTime}</span>
+                                </div>
+                            </Row>
+                            <Row>
+                                <div className='song-content-label'>
+                                    <span style={{ fontSize:"12px" }}>标签:</span>
+                                    {this.state.labels.map( (item) => {
+                                        return(
+                                            <span style={{marginLeft:"5px",fontSize:"12px",color:"#2273C2" }}>{item}</span>
+                                        )
+                                    })}
+                                </div>
+                            </Row>
+                            <Row>
+                                {localStorage.getItem('loginObj')?
+                                    <div className='add'>
+                                        <Button onClick={this.onClickAdd}>添加至您的愿望单</Button>
+                                    </div>
+                                    :
+                                    <Spin/>
+                                }
+
+                            </Row>
+
+                        </Col>
+                        <Col span={4}></Col>
                     </Row>
 
+                </div>
+
+                <div style={{marginTop: "100px"}}>
                     {/*评论标题显示*/}
                     <Row>
                         <Col span={2}></Col>

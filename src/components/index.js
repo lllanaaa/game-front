@@ -11,16 +11,16 @@ class Index extends Component {
     render(){
         return (
             <div className='home' style={{  }}>
-                <div className='header'>
+                <div className='header' style={{ backgroundColor: "#171A21"}}>
                     <Header />
                 </div>
-                <div className='banner' style={{ marginTop:"20vh", backgroundImage: `url(${bg1})`}}>
+                <div className='banner' style={{ backgroundImage: `url(${bg1})`}}>
                     <Banner />
                 </div>
                 <div className='content' style={{ marginTop:"20px", marginBottom:"20px" }}>
                     <Content />
                 </div>
-                <div className='footer'>
+                <div className='footer' style={{ marginTop: "140px"}}>
                     <Footer />
                 </div>
             </div>

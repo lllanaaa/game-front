@@ -18,7 +18,8 @@
     "redux": "latest",
     "redux-thunk": "latest",
     "web-vitals": "^0.2.4",
-    "axios": "latest"
+    "axios": "latest",
+    "video-react": "^0.14.1"
   },
   "scripts": {
     "start": "react-scripts start",

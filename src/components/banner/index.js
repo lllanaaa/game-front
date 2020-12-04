@@ -6,7 +6,6 @@ import { getSongBanner } from '../../api';
 import { withRouter } from 'react-router-dom'
 import './index.scss'
 
-
 import banner1 from '../../source/game_pic/banner_pic/1.jpg'
 import banner2 from '../../source/game_pic/banner_pic/2.jpg'
 import banner3 from '../../source/game_pic/banner_pic/3.jpg'
@@ -33,16 +32,15 @@ class Banner extends Component {
     }
 
     componentDidMount() {
-        // getSongBanner().then( (res)=>{
-        //     //请求轮播图数据,通过getBannerFunc函数给回到
-        //     if(res.data.code === 200) {
-        //         console.log(res.data);
-        //         this.state.bannerBgArr = [...res.data.songs];
-        //     }else{
-        //         console.log("请求失败")
-        //     }
-        // }).catch( (error)=>{
-        // })
+        getSongBanner().then( (res)=>{
+            //请求轮播图数据,通过getBannerFunc函数给回到
+            if(res.data.code === 200) {
+                this.state.banners = [...res.data.banners];
+            }else{
+                console.log("请求失败")
+            }
+        }).catch( (error)=>{
+        })
 
     }
 
@@ -94,7 +92,7 @@ class Banner extends Component {
 
 
         return (
-            <div style={{ position:"relative",marginTop:"30px",minWidth:"990px"}} className={`indexBanner${this.state.indexBanners}`}>
+            <div style={{ position:"relative",paddingTop:"30px",minWidth:"990px", marginTop:"30px"}} className={`indexBanner${this.state.indexBanners}`}>
                 <Row>
                     <Col span={4}></Col>
                     <Col span={16}>

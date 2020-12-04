@@ -9,6 +9,8 @@ import pic3 from '../../source/game_pic/content_pic/3.jpg'
 import pic4 from '../../source/game_pic/content_pic/4.jpg'
 import withRouter from "react-router-dom/es/withRouter";
 
+import {getSongDiscount, getSongRecommend, getSongLastest } from '../../api';
+
 const { Meta } = Card;
 
 
@@ -36,6 +38,36 @@ class Content extends Component {
                 {gameId: 1, gameName: "只狼", price: 219, discount: 0.2, picUrl: '../../source/game_pic/content_pic/1.jpg'},
             ]
         }
+    }
+
+    componentDidMount() {
+        getSongDiscount().then( (res)=>{
+            if(res.data.code === 200) {
+                this.state.discountGames = [...res.data.discount];
+            }else{
+                console.log("请求失败")
+            }
+        }).catch( (error)=>{
+        });
+
+        getSongRecommend().then( (res)=>{
+            if(res.data.code === 200) {
+                this.state.recommendGames = [...res.data.recommend];
+            }else{
+                console.log("请求失败")
+            }
+        }).catch( (error)=>{
+        });
+
+        getSongLastest().then( (res)=>{
+            if(res.data.code === 200) {
+                this.state.lastestGames = [...res.data.lastest];
+            }else{
+                console.log("请求失败")
+            }
+        }).catch( (error)=>{
+        });
+
     }
 
     handleClick = (targetId) => {
