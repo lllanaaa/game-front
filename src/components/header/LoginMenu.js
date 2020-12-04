@@ -29,8 +29,8 @@ class LoginMenu extends Component{
         this.props.history.push("/");
         window.location.reload(true);
     }
-
-
+   
+    
     render(){
         const menu = (
             <Menu>
