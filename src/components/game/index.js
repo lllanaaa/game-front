@@ -1,12 +1,6 @@
 import  React, { Component } from 'react';
 import { Row, Col } from 'antd'
 import 'antd/dist/antd.css';
-import banner1 from '../../source/game_pic/banner_pic/1.jpg'
-import banner2 from '../../source/game_pic/banner_pic/2.jpg'
-import banner3 from '../../source/game_pic/banner_pic/3.jpg'
-import banner4 from '../../source/game_pic/banner_pic/4.jpg'
-import banner5 from '../../source/game_pic/banner_pic/5.jpg'
-import banner6 from '../../source/game_pic/banner_pic/6.jpg'
 import Header from "../header";
 import Footer from "../footer";
 
@@ -17,6 +11,7 @@ class Game extends Component {
     constructor(props){
         super(props);
         this.state={
+            gameId: 1,
             gameName: "只狼",
             publishTime: "2020/12/02",
             publisher: "FromSoftware",
@@ -32,6 +27,13 @@ class Game extends Component {
     }
 
     componentDidMount() {
+
+        const gameId = parseInt(this.props.location.search.match(/\d+/gi).toString());
+
+        this.setState({
+            gameId
+        })
+
         // getSongBanner().then( (res)=>{
         //     //请求轮播图数据,通过getBannerFunc函数给回到
         //     if(res.data.code === 200) {
@@ -77,10 +79,6 @@ class Game extends Component {
                 </div>
 
                 <div style={{marginTop: "100px"}}>
-                    <Row>
-                        <Col span={12}>col-12</Col>
-                        <Col span={12}>col-12</Col>
-                    </Row>
                     <Row>
                         {/*图片或视频*/}
                         <Col span={12}>
