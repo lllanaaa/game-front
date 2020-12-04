@@ -17,7 +17,7 @@ class Header extends Component{
         let csrf = 1;
 
         return (
-            <div className='topPart-wrapper' style={{ minWidth:"1200px" }}>
+            <div className='topPart-wrapper' style={{ minWidth:"1200px",backgroundColor:"red" }}>
                 <Row gutter={30} >
                     <Col span={4}>
                         <div>

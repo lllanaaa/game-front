@@ -1,0 +1,37 @@
+.content {
+    background-color: rgb(27,40,56);
+}
+
+.titleLeft {
+    background-image: linear-gradient(to right, rgb(27,40,56) , rgb(32,73,106));
+    padding-top: 6vh;
+    padding-bottom: 6vh;
+    font-size: 32px;
+    color: #fff;
+}
+
+.titleRight {
+    background-image: linear-gradient(to right, rgb(32,73,106) , rgb(27,40,56));
+    padding-top: 6vh;
+    padding-bottom: 6vh;
+}
+
+.top {
+    height: 6vh;
+    border-top-color: rgb(27,40,56);
+    background-image: -webkit-radial-gradient(top,rgb(32,73,106) 30%, rgb(27,40,56) 70%);
+}
+
+.goods {
+    background-color: rgb(22,32,45);
+    width: 100%;
+    margin-bottom: 1vh;
+    padding: 2vh;
+}
+
+.bottom {
+    padding-top: 6vh;
+    padding-bottom: 6vh;
+    margin-bottom: 60vh;
+    background-color: rgb(22,32,45);
+}

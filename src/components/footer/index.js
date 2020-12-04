@@ -5,7 +5,7 @@ class Footer extends Component {
 
     render() {
         return (
-            <div className='footer' style={{ minWidth:"1050px" }}>
+            <div className='footer' style={{ minWidth:"1050px",backgroundColor:"red" }}>
                 <Row gutter={10}>
                     <Col span={8}></Col>
                     <Col span={16}>
