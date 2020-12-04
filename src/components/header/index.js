@@ -3,6 +3,7 @@ import { Col, Row } from "antd";
 import { NavLink } from "react-router-dom";
 import LoginMenu from "./LoginMenu";
 import NotLoginMenu from "./NotLoginMenu";
+import { withRouter } from 'react-router-dom'
 
 class Header extends Component{
 
@@ -12,8 +13,8 @@ class Header extends Component{
 
     render(){
 
-        let csrf = localStorage.getItem("token");
-
+        // let csrf = localStorage.getItem("token");
+        let csrf = 1;
 
         return (
             <div className='topPart-wrapper' style={{ minWidth:"1200px" }}>
@@ -58,4 +59,4 @@ class Header extends Component{
     }
 }
 
-export default Header;
+export default withRouter(Header);

@@ -1,6 +1,5 @@
 import React, {Component} from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { connect } from 'react-redux';
 import loadable from '../utils/loadable';
 import { Layout } from 'antd';
 
@@ -10,6 +9,8 @@ const { Header, Footer, Sider, Content } = Layout;
 const dynamicIndex = loadable(() => import('../components'));
 const dynamic404 = loadable(() => import('../components/404'));
 const dynamicGame = loadable(() => import('../components/game'));
+const dynamicUserMyCart = loadable(() => import('../components/user/myCart'));
+const dynamicUserSetting = loadable(() => import('../components/user/setting'));
 
 class AllRoute extends Component {
 
@@ -20,6 +21,8 @@ class AllRoute extends Component {
                     <Route path='/' exact component={ dynamicIndex } />
                     <Route path='/shoppingMall' exact component={ dynamicIndex } />
                     <Route path='/game'  component={ dynamicGame } />
+                    <Route path='/user/myCart' component={ dynamicUserMyCart } />
+                    <Route path='/user/setting' component={ dynamicUserSetting } />
                     <Route path='*'  component={ dynamic404 } />
                 </Switch>
             </Router>
