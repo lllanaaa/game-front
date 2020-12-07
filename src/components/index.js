@@ -20,7 +20,7 @@ class Index extends Component {
                 <div className='content' style={{ marginTop:"20px", marginBottom:"20px" }}>
                     <Content />
                 </div>
-                <div className='footer' style={{ marginTop: "140px"}}>
+                <div className='footer' style={{ marginTop: "400px", paddingTop: "400px"}}>
                     <Footer />
                 </div>
             </div>

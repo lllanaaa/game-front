@@ -1,31 +1,31 @@
 import axios from 'axios';
 
-export const baseURL = "localhost:8080";
+export const baseURL = "http://47.115.166.190:8080";
 
 //获取轮播图
 export const getSongBanner = () =>{
     const url = `${baseURL}/shoppingMall/banner`;
-    return axios.get( url,{ withCredentials: true } )
+    return axios.get( url )
 };
 
 export const getSongDiscount = () =>{
     const url = `${baseURL}/shoppingMall/discount`;
-    return axios.get( url,{ withCredentials: true } )
+    return axios.get( url)
 };
 
 export const getSongRecommend = () =>{
     const url = `${baseURL}/shoppingMall/recommend`;
-    return axios.get( url,{ withCredentials: true } )
+    return axios.get( url )
 };
 
 export const getSongLastest = () =>{
     const url = `${baseURL}/shoppingMall/lastest`;
-    return axios.get( url,{ withCredentials: true } )
+    return axios.get( url )
 };
 
 export const getGameDetail = (id) => {
     const url = `${baseURL}/game?id=${id}`;
-    return axios.get( url,{ withCredentials: true } )
+    return axios.get( url )
 };
 
 export const addUserList = (gameId, userId) => {
@@ -35,7 +35,19 @@ export const addUserList = (gameId, userId) => {
             gameId,
             userId
         }
-    }, {withCredentials: true})
+    })
+};
+
+export const addComment = (gameId, userId, content, time) => {
+    const url = `${baseURL}/addComment`;
+    return axios.get(url, {
+        params: {
+            gameId,
+            userId,
+            content,
+            time
+        }
+    })
 };
 
 
@@ -49,7 +61,7 @@ export const register = (nickname,gender,registerPassword,registerMail) => {
             registerPassword:registerPassword,
             registerMail:registerMail,
         }
-    }, { withCredentials:true });
+    });
 };
 
 // 发送邮箱注册验证码
@@ -59,7 +71,7 @@ export const sendMailCode = (registerMail) =>{
         params:{
             registerMail:registerMail,
         }
-    },{ withCredentials:true });
+    });
 };
 
 // 验证邮箱注册验证码
@@ -70,7 +82,7 @@ export  const checkMailCode = (registerMail,registerVerifyCode) =>{
             registerVerifyCode:registerVerifyCode,
             registerMail:registerMail,
         }
-    }, { withCredentials:true });
+    });
 };
 
 // 登录
@@ -82,7 +94,7 @@ export const login = (loginMail,loginPassword) => {
             loginMail: loginMail,
             loginPassword: loginPassword,
         }
-    }, { withCredentials:true });
+    });
 };
 
 // 忘记密码
@@ -93,7 +105,7 @@ export const resetPasswordByMail = (resetVerifyMail,resetPassword) =>{
             resetVerifyMail: resetVerifyMail,
             resetPassword:resetPassword,
         }
-    }, { withCredentials:true });
+    });
 };
 
 

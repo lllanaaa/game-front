@@ -1,33 +1,62 @@
-import  React, { Component } from 'react';
+import  React, { Component, createElement, useState } from 'react';
 import { Row, Col, Button, Spin } from 'antd'
 import 'antd/dist/antd.css';
 import Header from "../header";
 import Footer from "../footer";
-import { getGameDetail, addUserList } from '../../api';
+import {getGameDetail, addUserList, getSongRecommend, addComment} from '../../api';
 import { Player, ControlBar } from 'video-react';
 import 'video-react/dist/video-react.css';
+import { Comment, Avatar, Form, List, Input, Tooltip } from 'antd';
+import moment from 'moment';
 
+const { TextArea } = Input;
 
-import pic from '../../source/game_pic/content_pic/1.jpg'
+const CommentList = ({ comments }) => (
+    <List
+        dataSource={comments}
+        itemLayout="horizontal"
+        renderItem={props =>
+            <Comment {...props} />
+        }
+    />
+);
+
+const Editor = ({ onChange, onSubmit, submitting, value }) => (
+    <>
+        <Form.Item>
+            <TextArea rows={4} onChange={onChange} value={value} />
+        </Form.Item>
+        <Form.Item>
+            <Button htmlType="submit" loading={submitting} onClick={onSubmit}>
+                Add Comment
+            </Button>
+        </Form.Item>
+    </>
+);
+
 
 class Game extends Component {
 
     constructor(props){
         super(props);
         this.state={
-            gameId: 1,
-            gameName: "只狼",
-            publishTime: "2020/12/02",
-            publisher: "FromSoftware",
-            picUrl: '../../source/game_pic/content_pic/1.jpg',
-            labels: ["类魂游戏","困难","单人"],
-            price: 219,
-            description: "进入由打造了《黑暗之魂》系列的知名开发商FromSoftware倾力制作的全新冒险，用智慧和力量斩开复仇之路。 决死复仇，夺回荣誉，智杀强敌。",
+            gameId: 0,
+            gameName: "",
+            publishTime: "",
+            publisher: "",
+            picUrl: "",
+            labels: [],
+            price: 0,
+            description: null,
             discount: 0.2,
             reviewNum: 10,
-            reviews: [{id: 1, gameId: 1, content: "评论1", userId: 1, userName: "玩家1", userPicUrl: "", time: ""}, {id: 2, gameId: 1, content: "评论2", userId: 2, userName: "玩家2", userPicUrl: "", time: ""}],
-            reviewContent: "好评如潮",
+            reviews: [],
+            reviewContent: "",
             mvUrl: "",
+
+            comments: [],
+            submitting: false,
+            value: '',
         }
     }
 
@@ -38,20 +67,21 @@ class Game extends Component {
         getGameDetail(gameId).then( (res)=>{
             if(res.data.code === 200) {
                 this.setState({
-                    gameId: res.data.data,
-                    gameName: res.data.data,
-                    publishTime: res.data.data,
-                    publisher: res.data.data,
-                    picUrl: res.data.data,
-                    labels: res.data.data,
-                    price: res.data.data,
-                    description: res.data.data,
-                    discount: res.data.data,
-                    reviewNum: res.data.data,
-                    reviews:  res.data.data,
-                    reviewContent: res.data.data,
-                    mvUrl: res.data.data,
-                })
+                    gameId: res.data.data.gameId,
+                    gameName: res.data.data.gameName,
+                    publishTime: res.data.data.publishTime,
+                    publisher: res.data.data.publisher,
+                    picUrl: res.data.data.picUrl,
+                    labels: res.data.data.labels,
+                    price: res.data.data.price,
+                    description: res.data.data.description,
+                    discount: res.data.data.discount,
+                    reviewNum: res.data.data.reviewNum,
+                    comments:  res.data.data.reviews,
+                    reviewContent: res.data.data.reviewContent,
+                    mvUrl: res.data.data.mvUrl,
+                });
+                console.log(this.state)
             }else{
                 console.log("请求失败")
             }
@@ -76,29 +106,84 @@ class Game extends Component {
 
     };
 
+    handleSubmit = () => {
+        const userId = JSON.parse(localStorage.getItem('loginObj')).userId
+
+        if (!this.state.value) {
+            return;
+        }
+
+        this.setState({
+            submitting: true,
+        });
+
+        setTimeout(() => {
+            addComment(this.state.gameId, userId, moment().fromNow()).then( (res)=>{
+                if(res.data.code === 200) {
+                    console.log("请求成功")
+                }else{
+                    console.log("请求失败")
+                }
+            }).catch( (error)=>{
+            });
+
+            this.setState({
+                submitting: false,
+                value: '',
+                comments: [
+                    {
+                        author: '',
+                        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                        content: <p>{this.state.value}</p>,
+                        datetime: moment().fromNow(),
+                    },
+                    ...this.state.comments,
+                ],
+            });
+        }, 1000);
+    };
+
+    handleChange = e => {
+        this.setState({
+            value: e.target.value,
+        });
+    };
+
 
     render() {
 
         const showReviews =  this.state.reviews.length > 0
             ?
             this.state.reviews.map( (item,index,arr)=>{
-                //对返回的数据中的/n进行替换，替换成<br/>标签
-                const str = item.content.replace(/\n/g,'<br />');
-                //去除最后一条评论的borderbottom
-                const showBorder = index === arr.length-1 ? false : true;
                 return (
-                    <div className='newComment' style={{marginBottom:"25px"}}>
-                        <span className='avatar' style={{backgroundImage:`url(${item.userPicUrl})`}}></span>
-                        <span className='userComment'>
-                            <span style={{ color:"#1679C5",fontSize:"12px" }}>{item.userName}</span>
-                            <span style={{ fontSize:"12px" }} dangerouslySetInnerHTML={{__html: str}}></span>
-                        </span>
-                        <span className='commentTime'>{item.time}</span>
+                    <div>
+                        <Comment
+                            author={<a>{item.userName}</a>}
+                            avatar={
+                                <Avatar
+                                    src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                                    alt=""
+                                />
+                            }
+                            content={
+                                <p>
+                                    {item.content}
+                                </p>
+                            }
+                            datetime={
+                                <Tooltip title={moment().format('YYYY-MM-DD HH:mm:ss')}>
+                                    <span>{item.time}</span>
+                                </Tooltip>
+                            }
+                        />
                     </div>
+
                 )
             })
             :
             null;
+
+        const { submitting, value, comments } = this.state;
 
         return (
             <div>
@@ -124,7 +209,7 @@ class Game extends Component {
                         <Col span={12}>
                             <div style={{height: 420, width:700}}>
                                 <Player>
-                                    <source src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4" />
+                                    <source src={this.state.mvUrl} />
                                 </Player>
                             </div>
 
@@ -132,12 +217,12 @@ class Game extends Component {
                         <Col span={6}>
                             <Row>
                                 <div className='song-logo-img'>
-                                    <img src={pic} alt="" style={{width: "300px"}}/>
+                                    <img src={this.state.picUrl} alt="" style={{width: "300px"}}/>
                                 </div>
                             </Row>
                             <Row>
                                 <div className='description'>
-                                    描述内容
+                                    {this.state.description}
                                 </div>
                             </Row>
                             <Row>
@@ -166,6 +251,14 @@ class Game extends Component {
                                             <span style={{marginLeft:"5px",fontSize:"12px",color:"#2273C2" }}>{item}</span>
                                         )
                                     })}
+                                </div>
+                            </Row>
+                            <Row>
+                                <div className='song-content-belongAlbum'>
+                                    <span style={{ fontSize:"12px" }}>价格:</span>
+                                    <span style={{marginLeft:"5px",fontSize:"12px",color:"#2273C2" }}>{this.state.price}</span>
+                                    <span style={{ fontSize:"12px" }}>折扣:</span>
+                                    <span style={{marginLeft:"5px",fontSize:"12px",color:"#2273C2" }}>{this.state.discount}</span>
                                 </div>
                             </Row>
                             <Row>
@@ -214,20 +307,34 @@ class Game extends Component {
                         <Col span={2}></Col>
                     </Row>
 
-                    <Row style={{marginTop:"40px"}}>
-                        <Col span={2}></Col>
-                        <Col span={18}>
-                            {
-                                this.state.reviews.length > 0
-                                    ?
-                                    <div style={{ marginLeft:"40px" }}>
-                                        {
-                                            showReviews
-                                        }
-                                    </div>
-                                    :
-                                    null
-                            }
+                    <Row>
+                        <Col span={4}></Col>
+                        <Col span={16}>
+                            {comments.length > 0 && <CommentList comments={comments} />}
+                            <Comment
+                                avatar={
+                                    <Avatar
+                                        src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                                        alt=""
+                                    />
+                                }
+                                content={
+                                    <Editor
+                                        onChange={this.handleChange}
+                                        onSubmit={this.handleSubmit}
+                                        submitting={submitting}
+                                        value={value}
+                                    />
+                                }
+                            />
+                        </Col>
+                        <Col span={4}></Col>
+                    </Row>
+
+                    <Row>
+                        <Col span={4}></Col>
+                        <Col span={16}>
+                            {showReviews}
                         </Col>
                         <Col span={4}></Col>
                     </Row>
@@ -243,5 +350,6 @@ class Game extends Component {
     }
 
 }
+
 
 export default Game

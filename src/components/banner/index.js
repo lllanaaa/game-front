@@ -6,28 +6,13 @@ import { getSongBanner } from '../../api';
 import { withRouter } from 'react-router-dom'
 import './index.scss'
 
-import banner1 from '../../source/game_pic/banner_pic/1.jpg'
-import banner2 from '../../source/game_pic/banner_pic/2.jpg'
-import banner3 from '../../source/game_pic/banner_pic/3.jpg'
-import banner4 from '../../source/game_pic/banner_pic/4.jpg'
-import banner5 from '../../source/game_pic/banner_pic/5.jpg'
-import banner6 from '../../source/game_pic/banner_pic/6.jpg'
-
-
 class Banner extends Component {
 
     constructor(props){
         super(props);
         this.state={
             indexBanner: 0,//当前显示轮播图的引索,默认为第一张
-            banners: [
-                {id: 1, picUrl: banner1, name: "1"},
-                {id: 2, picUrl: banner2, name: "2"},
-                {id: 3, picUrl: banner3, name: "3"},
-                {id: 4, picUrl: banner4, name: "4"},
-                {id: 5, picUrl: banner5, name: "5"},
-                {id: 6, picUrl: banner6, name: "6"},
-            ]//轮播图图片,由于没有背景图的接口数据,这里用图片加上模糊度去模拟
+            banners: [],
         }
     }
 
