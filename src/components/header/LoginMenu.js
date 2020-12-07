@@ -53,9 +53,7 @@ class LoginMenu extends Component{
         return (
             <div style={{ color:"#fff" }} className='login-menu'>
                 <Dropdown overlay={menu}>
-                    <span style={{ marginRight:"10px" }}>
-                        <Avatar size="large" src={UserDefault}/>
-                    </span>
+                    <Avatar size="large"  src={UserDefault}/>
                 </Dropdown>
             </div>
         )

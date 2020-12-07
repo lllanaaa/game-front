@@ -3,7 +3,7 @@ import {Row, Col, Card, Spin} from 'antd';
 import 'antd/dist/antd.css'
 import './index.css'
 
-import withRouter from "react-router-dom/es/withRouter";
+import {withRouter} from "react-router-dom";
 
 import {getSongDiscount, getSongRecommend, getSongLastest } from '../../api';
 

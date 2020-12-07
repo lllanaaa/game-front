@@ -7,7 +7,7 @@
     padding-top: 6vh;
     padding-bottom: 6vh;
     font-size: 32px;
-    color: #fff;
+    color: rgba(255,255,255,0.9);
 }
 
 .titleRight {
@@ -27,11 +27,26 @@
     width: 100%;
     margin-bottom: 1vh;
     padding: 2vh;
+    color: #c7d5e0;
 }
 
 .bottom {
     padding-top: 6vh;
     padding-bottom: 6vh;
+    padding-left: 2vw;
     margin-bottom: 60vh;
     background-color: rgb(22,32,45);
+}
+
+.toBuy {
+    background-color: rgb(42,71,94);
+    color: rgb(83,193,245);
+    padding: 1vh 1vw; 
+    font-size: 3vh;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.toBuy:hover {
+    background-image: linear-gradient(to right, rgb(103,193,245) , rgb(67,126,160));
+    color: rgb(255,255,255);
 }

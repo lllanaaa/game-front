@@ -1,16 +1,17 @@
 import axios from 'axios';
 
 export const baseURL = "http://47.115.166.190:8080";
+// export const baseURL = "http://192.168.43.241:8080/"
 
 //获取轮播图
 export const getSongBanner = () =>{
     const url = `${baseURL}/shoppingMall/banner`;
-    return axios.get( url )
+    return axios.get( url)
 };
 
 export const getSongDiscount = () =>{
     const url = `${baseURL}/shoppingMall/discount`;
-    return axios.get( url)
+    return axios.get( url )
 };
 
 export const getSongRecommend = () =>{
@@ -66,6 +67,7 @@ export const register = (nickname,gender,registerPassword,registerMail) => {
 
 // 发送邮箱注册验证码
 export const sendMailCode = (registerMail) =>{
+    console.log(registerMail)
     const url =`${baseURL}/register/sendCode`;
     return axios.get(url,{
         params:{
@@ -87,7 +89,6 @@ export  const checkMailCode = (registerMail,registerVerifyCode) =>{
 
 // 登录
 export const login = (loginMail,loginPassword) => {
-    console.log(loginMail)
     const url = `${baseURL}/login`;
     return axios.get(url,{
         params:{
@@ -108,4 +109,43 @@ export const resetPasswordByMail = (resetVerifyMail,resetPassword) =>{
     });
 };
 
+//获取购物车游戏信息
+export const getMyCartInfo = (userId) => {
+    const url = `${baseURL}/myCart`;
+    return axios.get(url,{
+        params:{
+            userId: userId
+        }
+    })
+}
 
+//删除购物车某个商品
+export const deleteMyCartGame = (userId,gameId) => {
+    const url = `${baseURL}/deleteGame`;
+    return axios.get(url,{
+        params:{
+            userId: userId,
+            gameId: gameId
+        }
+    })
+}
+
+//删除购物车所有商品
+export const deleteMyCartAllGame = (userId) => {
+    const url = `${baseURL}/deleteAllGame`;
+    return axios.get(url,{
+        params:{
+            userId: userId
+        }
+    })
+}
+
+//模糊查询搜索商品
+export const searchGame = (content) => {
+    const url = `${baseURL}/search`;
+    return axios.get(url,{
+        params:{
+            content: content
+        }
+    })
+}

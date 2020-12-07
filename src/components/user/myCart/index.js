@@ -1,18 +1,73 @@
 import React,{ Component,Fragment } from 'react';
 import Header from '../../../components/header/index'
 import Footer from '../../../components/footer/index'
-import {Col,Row,Dropdown} from 'antd';
+import {Col,Row,message} from 'antd';
 import './index.scss'
+import {
+    getMyCartInfo,
+    deleteMyCartGame,
+    deleteMyCartAllGame
+} from '../../../api/index'
 
 class MyCart extends Component{
 
     constructor(props) {
         super(props);
         this.state={
-            goods:[{good:'2'},{good:'1'}],
-            // goods:[],
-            mvTotal:0,
+            goods:[
+                {gameId: 1,gameName: 'My Time at Portia',picUrl: 'https://media.st.dl.pinyuncloud.com/steam/apps/1062830/capsule_sm_120_alt_assets_1_schinese.jpg?t=1607021443',publishTime:'datetime',price: 39.21,discount: 0.35},
+                {gameId: 2,gameName: '波西亚时光',picUrl: 'https://media.st.dl.pinyuncloud.com/steam/apps/1062830/capsule_sm_120_alt_assets_1_schinese.jpg?t=1607021443',publishTime:'datetime',price: 39.21,discount: 0.35},
+            ],
+            goods:[],
+            totalAmount: 0,
         }
+    }
+
+    componentDidMount() {
+        this.getData()
+    }
+
+    getData=()=> {
+        let userId = JSON.parse(localStorage.getItem("loginObj"))['userId']
+        getMyCartInfo(userId).then( (res)=>{
+            if(res.data.code === 200) {
+                this.setState({
+                    goods: res.data.games,
+                    totalAmount: res.data.totalAmount
+                })
+            }else {
+                console.log("网络出问题")
+            }
+        }).catch(err=>{ console.log(err) })
+    }
+
+    navigateToGame=(gameId)=> {
+        this.props.history.push(`/game?id=${gameId}`);
+    }
+    navigateToShopping=()=> {
+        this.props.history.push(`/shoppingMall`)
+    }
+    removeGame=(gameId)=> {
+        let userId = JSON.parse(localStorage.getItem("loginObj"))['userId']
+        deleteMyCartGame(userId, gameId).then( (res)=>{
+            if(res.data.code === 200) {
+                message.info("移除成功~")
+                this.getData()
+            }else {
+                console.log("网络出问题")
+            }
+        })
+    }
+    removeAllGame=()=> {
+        let userId = JSON.parse(localStorage.getItem("loginObj"))['userId']
+        deleteMyCartAllGame(userId).then( (res)=>{
+            if(res.data.code === 200) {
+                message.info("移除成功~")
+                this.getData()
+            }else {
+                console.log("网络出问题")
+            }
+        })
     }
 
     render(){
@@ -20,55 +75,35 @@ class MyCart extends Component{
             return (
                 <Fragment  key={index}>
                     <Row className='goods'>
-                        <Col span={8}>tupian</Col>
-                        <Col span={12}>
-                            
+                        <Col span={8}>
+                            <img 
+                                style={{ cursor:'pointer',width:'80%',height:'10vh',backgroundColor:'#fff' }}
+                                alt=""
+                                src={item.picUrl}
+                                // onClick={ ()=>this.navigateToGame(item.gameId) }
+                            />
                         </Col>
-                        <Col span={4}>jiage</Col>
+                        <Col span={10} style={{ lineHeight:'5vh' }}>
+                            <Row style={{ cursor:'pointer' }}>{item.gameName}</Row>
+                            <Row>发行于:&nbsp;{item.publishTime}</Row>
+                        </Col>
+                        <Col span={4} style={{ lineHeight:'5vh' }}>
+                            <Row style={{ color:'#56707f',fontSize:'small',textDecoration:'line-through' }}>¥{item.price}</Row>
+                            <Row>¥{Math.ceil(item.price*item.discount*100)/100}</Row>
+                        </Col>
+                        <Col span={2} style={{ lineHeight:'10vh' }}>
+                            <div 
+                                style={{ color:'#56707f',fontSize:'small',textDecoration:'underline',cursor:'pointer' }}
+                                onClick={ ()=>this.removeGame(item.gameId) }
+                            >移除</div>
+                        </Col>
                     </Row>
                 </Fragment>
-                // <Fragment key={index} >
-                //     <Col
-                //         span={5}
-                //         style={{ position:"relative",marginLeft:"1.0416%",marginRight:"1.0416%" }}
-                //     >
-                //         <div className="recommendMV-MV" style={{ transition:"all 0.5s", }}>
-                //             <img
-                //                 style={{ borderRadius:"5px",width:"100%",height:"26vh",cursor:"pointer",zIndex:"1000",position:"relative",backgroundColor:"#ffffff" }}
-                //                 alt=""
-                //                 src={'http://cyq.center:8000/'+item.mvPicUrl}
-                //                 title={item.mvName}
-                //                 onClick={ ()=>this.navigateToMV(item.mvId) }
-                //             />
-                //         </div>
-                //         <div className="recommendMV-content">
-                //             <div
-                //                 onClick={ ()=>this.navigateToMV(item.mvId) }
-                //                 style={{ marginTop:"2vh",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",fontSize:"2.6vh",cursor:"pointer" }}>
-                //                 {item.mvName}
-                //             </div>
-                //         </div>
-                //         <div className="recommendMV-content">
-                //             <div
-                //                 onClick={ ()=>this.navigateToSinger(item.singerId) }
-                //                 style={{ overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",fontSize:"2.5vh",cursor:"pointer" }}>
-                //                 {item.mvSinger}
-                //             </div>
-                //         </div>
-                //         <div
-                //             style={{ color:"rgba(0,0,0,0.5)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",fontSize:"2.5vh",cursor:"pointer" }}>
-                //             <HeartOutlined style={{ marginRight:"1vh",color:"#02c0cf" }}/>
-                //             {
-                //                 item.mvStar===0?"最新上架":item.mvStar
-                //             }
-                //         </div>
-                //     </Col>
-                // </Fragment>
             )
         } )
 
         return (
-            <div className='myCart' style={{  }}>
+            <div className='myCart'>
                 <div className='header'>
                     <Header />
                 </div>
@@ -92,14 +127,34 @@ class MyCart extends Component{
                                 </Row>
                                 :null
                             }
-                            <Row className='bottom'>
-                                <Row style={{ fontSize:'17px',color:'#fff'}}>
-                                    <div style={{ marginLeft:'2vw', marginRight:'35vw' }}>预计总额</div>
-                                    <div>$1</div>
+                            <Row className='bottom' >
+                                <Row style={{ fontSize:'3vh',color:'#c7d5e0',marginBottom:'4vh'}}>
+                                    <div style={{ marginRight:'35vw' }}>预计总额</div>
+                                    {
+                                        handledGoodsData.length>0?
+                                        <div>¥{Math.ceil(this.state.totalAmount*100)/100}</div>
+                                        :<div>¥0</div>
+                                    }
                                 </Row>
-                                <Row>
-
-                                </Row>
+                                {
+                                    handledGoodsData.length>0?
+                                    <Row >
+                                        <div 
+                                            style={{ color:'#56707f',fontSize:'small',textDecoration:'underline',cursor:'pointer',marginRight:'33vw',lineHeight:'5vh' }}
+                                            onClick={ ()=>this.removeAllGame() }
+                                        >移除所有物品</div>
+                                        <div 
+                                            className='toBuy'
+                                            // onClick={ ()=>this.navigateToBuy() }
+                                        >去购买</div>
+                                    </Row>
+                                    :<Row>
+                                        <div
+                                            className='toBuy'
+                                            onClick={ ()=>this.navigateToShopping() }
+                                        >去购物</div>
+                                    </Row>
+                                }
                             </Row>
                         </Col>
                         <Col span={6}></Col>

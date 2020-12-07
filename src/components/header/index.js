@@ -4,54 +4,68 @@ import { NavLink } from "react-router-dom";
 import LoginMenu from "./LoginMenu";
 import NotLoginMenu from "./NotLoginMenu";
 import { withRouter } from 'react-router-dom'
+import './index.scss';
 
 class Header extends Component{
 
     constructor(props) {
         super(props);
+        this.state= {
+        }
+        this.searchRef = React.createRef();
+    }
+
+    navigateToShoppingMall=()=> {
+        this.props.history.push(`/shoppingMall`)
+    }
+    navigateToSell=()=> {
+        this.props.history.push(`/sell`)
+    }
+    search=()=> {
+        let value = this.searchRef.current.value;
+        if(value.length>0){
+            this.props.history.push({ pathname:`/search`, content: value })
+        }else {
+            this.props.history.push(`/`)
+        }
     }
 
     render(){
 
-        // let csrf = localStorage.getItem("token");
-        let csrf = 1;
+        let csrf = localStorage.getItem("token");
 
         return (
-            <div className='topPart-wrapper' style={{ minWidth:"1200px",backgroundColor:"red" }}>
-                <Row gutter={30} >
+            <div className='header-wrapper' style={{ width:"100%",backgroundColor:'rgb(23,26,33)' }}>
+                <Row>
+                    <Col span={8}>
+                        <div className='title'>steam</div>
+                    </Col>
                     <Col span={4}>
-                        <div>
-                            steam
+                        <div className='header-selectList'>
+                            <span className='select' onClick={ ()=>this.navigateToShoppingMall() }>商城
+                            </span>
+                            <span className='select' onClick={ ()=>this.navigateToSell() }>热销
+                            </span>
                         </div>
                     </Col>
-                    <Col span={10}>
-                        <Row className='topPart-selectList' style={{ textAlign:"center" }} >
-                            <Col span={4}>
-                                <NavLink activeClassName='active' to='/shoppingMall'>商城</NavLink>
-                            </Col>
-                            <Col span={4}>
-                                <NavLink activeClassName='active' to='/sell'>热销</NavLink>
-                            </Col>
-                            <Col span={4}>
-                                <NavLink activeClassName='active' to='/search'>搜索</NavLink>
-                            </Col>
-                        </Row>
+                    <Col span={8}>
+                        <div className='search'>    
+                            <input 
+                                className="searchInput" 
+                                ref={ this.searchRef }
+                                type="text" 
+                                placeholder="搜索商城" 
+                                size="22" 
+                                autoComplete="off" />
+                            <div className='searchButton' onClick={ ()=>this.search() }>搜索</div>
+                        </div>
                     </Col>
-
-                    <Col span={10}>
-                        <Row gutter={10}>
-                            <Col style={{ textAlign:"right" }} span={10}>
-                            </Col>
-                            <Col span={6}>
-                                {
-                                    csrf
-                                        ?
-                                        <LoginMenu/>
-                                        :
-                                        <NotLoginMenu/>
-                                }
-                            </Col>
-                        </Row>
+                    <Col span={4}>
+                        {
+                            csrf?
+                            <LoginMenu/>
+                            :<NotLoginMenu/>
+                        }
                     </Col>
                 </Row>
             </div>

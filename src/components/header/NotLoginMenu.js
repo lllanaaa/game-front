@@ -27,7 +27,9 @@ class NotLoginMenu extends Component {
             getVerifyMailCodeDisabled:false,//忘记密码->获取验证码按钮状态,可用和不可用
             resetLoading:false,//忘记密码按钮状态,可以提交和不可提交
         }
-        this.formRef = React.createRef();
+        this.formRefLogin = React.createRef();
+        this.formRefRegister = React.createRef();
+        this.formRefReset = React.createRef();
     }
 
     //点击邮箱登录触发的函数,弹出modal
@@ -81,75 +83,61 @@ class NotLoginMenu extends Component {
 
     //邮箱登录提交触发的函数
     handleMailSubmit=(ev)=>{
-        console.log("我来登录了")
-        this.formRef.current.validateFields().then( value => 
-            console.log(value) 
+        this.formRefLogin.current.validateFields().then( value => 
+            login(value.mailAccount,value.mailPassword).then( (res)=>{
+                if(res.data.code === 200) {
+                    console.log(res.data)
+                    console.log(res.data.loginObj[0])
+                    console.log(res.data.loginObj[0].userId)
+                    localStorage.setItem("loginObj",JSON.stringify(res.data.loginObj[0]));
+                    localStorage.setItem("token",JSON.stringify(res.data.loginObj[0].userId))
+                    this.setState({
+                        mailVisible:false,
+                        mailLoading:false
+                    })
+                    this.forceUpdate();
+                    message.info("登录成功~")
+                    window.location.reload(true);
+                }else if(res.data.code === 400) {
+                    if(res.data.type === 1) {
+                        this.formRefLogin.current.resetFields()
+                        message.info("账号不存在，请注册！")
+                    }else if(res.data.type === 0) {
+                        this.formRefLogin.current.resetFields()
+                        message.info("密码不对,请重新登录！")
+                    }
+                }else {
+                    message.info("登录失败！请重新登录！")
+                }
+            }).catch((err)=>{
+                console.log(err)
+            })
         ).catch( errorInfo => console.log(errorInfo))
-        // this.formRef.current.validateFields(["mailAccount","mailPassword"], (err,values)=>{
-        //     if(err){
-        //         ev.preventDefault();
-        //     }else {
-        //         ev.preventDefault();
-        //         console.log("yes")
-        //         login(values.mailAccount,values.mailPassword).then( (res)=>{
-        //             console.log("登录",res)
-        //             if(res.data.code === 200) {
-        //                 localStorage.setItem("loginObj",JSON.stringify(res.data));
-        //                 localStorage.setItem("token",JSON.stringify(res.data.token))
-        //                 this.setState({
-        //                     mailVisible:false,
-        //                     mailLoading:false
-        //                 })
-        //                 this.forceUpdate();
-        //                 this.props.handleLogin(true)
-        //                 message.info("登录成功~")
-        //                 window.location.reload(true);
-        //             }else if(res.data.code === 401) {
-        //                 this.props.form.resetFields()
-        //                 message.info("密码不对,请重新登录！")
-        //             }else if(res.data.code === 403) {
-        //                 this.props.form.resetFields()
-        //                 message.info("账号不存在,请注册！")
-        //                 this.switchToRegister()
-        //             } else{
-        //                 message.info("登录失败！请重新登录！")
-        //                 message.error(res.data.msg)
-        //             }
-        //         } ).catch((err)=>{
-        //             message.info("账号不存在,请注册！")
-        //         })
-        //     }
-        // } )
     };
     //获取注册邮箱验证码
     handleRegisterMailCode=()=>{
-        console.log("我来获取注册验证码了")
         let value = this.mailRegisterRef.current.props.value;//获取注册邮箱的值
-        console.log("注册邮箱",value)
-        if(!value){
-            //如果邮箱为空
-            this.formRef.current.validateFields(["registerMail"])
-        }else {
-            sendMailCode(value).then((res)=>{
-                console.log("获取注册邮箱验证码",res)
-                if(res.data.code === 200) {
-                    this.setState({
-                        getMessageCodeDisabled:true
-                    })
-                    message.info("获取成功");
-                }else{
-                    message.info("验证码错误,请重新获取!")
-                }
-            }).catch( (err)=>{
-                message.info("网络堵车,请重新获取验证码嗷~")
-            })
-        }
+        sendMailCode(value).then((res)=>{
+            console.log("获取注册邮箱验证码",res)
+            if(res.data.code === 200) {
+                this.setState({
+                    getMessageCodeDisabled:true
+                })
+                message.info("获取成功");
+            }else{
+                message.info("验证码获取失败,请重新获取!")
+            }
+        }).catch( (err)=>{
+            console.log(err)
+        })
     };
     //注册提交触发的函数
     handleRegisterSubmit=(ev)=>{
         console.log("我来注册了")
-        this.formRef.current.validateFields().then( value => 
-            console.log(value) 
+        this.formRefRegister.current.validateFields().then( value => 
+            checkMailCode(value.registerMail,value.registerVerifyCode).then( (res)=>{
+                console.log("验证注册验证码",res)
+            })
         ).catch( errorInfo => console.log(errorInfo))
         // this.props.form.validateFields(
         //     ["nickname","gender","registerPassword","registerMail","registerVerifyCode"],
@@ -192,30 +180,25 @@ class NotLoginMenu extends Component {
     };
     //忘记密码，获取邮箱验证码
     handleVerifyMailCode=()=>{
-        console.log("我来获取忘记密码验证码了")
-        let value = this.mailVerifyRef.current.props.value;//获取注册邮箱的值
-        if(!value){
-            this.formRef.current.validateFields(["resetVerifyMail"])
-        }else {
-            sendMailCode(value).then((res)=>{
-                console.log("获取忘记密码邮箱验证码",res)
-                if(res.data.code === 200) {
-                    this.setState({
-                        getMessageCodeDisabled:true
-                    })
-                    message.info("获取成功");
-                }else{
-                    message.info("验证码错误,请重新获取!")
-                }
-            }).catch( (err)=>{
-                message.info("网络堵车,请重新获取验证码嗷~")
-            })
-        }
+        let value = this.mailVerifyRef.current.props.value;//获取邮箱的值
+        sendMailCode(value).then((res)=>{
+            console.log("获取忘记密码邮箱验证码",res)
+            if(res.data.code === 200) {
+                this.setState({
+                    getMessageCodeDisabled:true
+                })
+                message.info("获取成功");
+            }else{
+                message.info("验证码获取失败,请重新获取!")
+            }
+        }).catch( (err)=>{
+            console.log(err)
+        })
     };
     //忘记密码提交触发的函数
     handleResetSubmit=(ev)=>{
         console.log("我来忘记密码修改密码了")
-        this.formRef.current.validateFields().then( value => 
+        this.formRefReset.current.validateFields().then( value => 
             console.log(value) 
         ).catch( errorInfo => console.log(errorInfo))
         // this.props.form.validateFields(
@@ -261,13 +244,13 @@ class NotLoginMenu extends Component {
     render() {
 
         return (
-            <div className='notLogin' style={{ position:"relative",color:"#000" }}>
-                <div style={{ cursor:"pointer", }}>
-                    <span
-                        style={{ marginRight:"10px" }}
+            <div className='notLogin' style={{ }}>
+                <div style={{ cursor:"pointer",height:'7vh',lineHeight:'7vh' }}>
+                    <div
+                        style={{ fontSize:'15px',color:'rgba(255,255,255,0.9)' }}
                         onClick={ ()=>this.mailLogin() }
                     >登录
-                    </span>
+                    </div>
 
                     {/* 邮箱登录的弹出框 */}
                     <Modal
@@ -294,7 +277,7 @@ class NotLoginMenu extends Component {
                         width={350}
                     >
                         <div style={{ textAlign:"center",paddingTop:"30px" }}>
-                            <Form ref={this.formRef} onFinish={ (ev)=>this.handleMailSubmit(ev) }>
+                            <Form ref={this.formRefLogin} onFinish={ (ev)=>this.handleMailSubmit(ev) }>
                                 <Form.Item
                                     name="mailAccount"
                                     rules={[
@@ -347,7 +330,7 @@ class NotLoginMenu extends Component {
                         style={{ marginTop:"-50px",marginBottom:"50px" }}
                     >
                         <div style={{ textAlign:"center",paddingTop:"30px" }}>
-                            <Form ref={this.formRef} onFinish={ (ev)=>this.handleRegisterSubmit(ev) } >
+                            <Form ref={this.formRefRegister} onFinish={ (ev)=>this.handleRegisterSubmit(ev) } >
                                 <Form.Item
                                     label="昵称"
                                     labelCol={{span:5}}
@@ -432,7 +415,7 @@ class NotLoginMenu extends Component {
                                         ref={ this.mailRegisterRef }
                                         placeholder="0~18位，仅含@.com/net"
                                         style={{ width:"100%" }}
-                                        autocomplete="off" />
+                                        autoComplete="off" />
                                 </Form.Item>
                                 <Form.Item
                                     label="验证码"
@@ -446,7 +429,7 @@ class NotLoginMenu extends Component {
                                     ]}
                                 >
                                     <div style={{ width:"100%",display:"inline" }}>
-                                        <Input placeholder='请输入验证码' style={{ width:"50%"}} autocomplete="off"/>
+                                        <Input placeholder='请输入验证码' style={{ width:"50%"}} autoComplete="off"/>
                                         <Button
                                             type="primary"
                                             onClick={ ()=>this.handleRegisterMailCode() }
@@ -480,7 +463,7 @@ class NotLoginMenu extends Component {
                         style={{ marginTop:"-50px",marginBottom:"50px" }}
                     >
                         <div style={{ textAlign:"center",paddingTop:"30px" }}>
-                            <Form ref={this.formRef} onFinish={ (ev)=>this.handleResetSubmit(ev) }>
+                            <Form ref={this.formRefReset} onFinish={ (ev)=>this.handleResetSubmit(ev) }>
                                 <Form.Item
                                     label="邮箱"
                                     labelCol={{span:5}}
@@ -495,7 +478,7 @@ class NotLoginMenu extends Component {
                                         ref={ this.mailVerifyRef }
                                         placeholder="请输入邮箱账号"
                                         style={{ width:"100%" }}
-                                        autocomplete="off" />
+                                        autoComplete="off" />
                                 </Form.Item>
                                 <Form.Item
                                     label="验证码"
@@ -509,7 +492,7 @@ class NotLoginMenu extends Component {
                                     ]}
                                 >
                                     <div style={{ width:"100%",display:"inline" }}>
-                                        <Input placeholder='请输入验证码' style={{ width:"50%"}} autocomplete="off"/>
+                                        <Input placeholder='请输入验证码' style={{ width:"50%"}} autoComplete="off"/>
                                         <Button
                                             type="primary"
                                             onClick={ ()=>this.handleVerifyMailCode() }

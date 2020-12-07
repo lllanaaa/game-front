@@ -11,6 +11,7 @@ const dynamic404 = loadable(() => import('../components/404'));
 const dynamicGame = loadable(() => import('../components/game'));
 const dynamicUserMyCart = loadable(() => import('../components/user/myCart'));
 const dynamicUserSetting = loadable(() => import('../components/user/setting'));
+const dynamicSearch = loadable(() => import('../components/search/index'))
 
 class AllRoute extends Component {
 
@@ -23,6 +24,7 @@ class AllRoute extends Component {
                     <Route path='/game'  component={ dynamicGame } />
                     <Route path='/user/myCart' component={ dynamicUserMyCart } />
                     <Route path='/user/setting' component={ dynamicUserSetting } />
+                    <Route path='/search' component={ dynamicSearch } />
                     <Route path='*'  component={ dynamic404 } />
                 </Switch>
             </Router>

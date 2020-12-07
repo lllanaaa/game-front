@@ -1,4 +1,57 @@
 .header-wrapper {
-  width: 90%;
-  margin:0 5%;
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+}
+
+.title {
+    color: #fff;
+    height: 7vh;
+    font-size: 28px;
+    line-height: 7vh;
+    padding-left: 2vw;
+}
+
+.header-selectList {
+    display: flex;
+    color: rgba(255,255,255,0.9);
+    line-height: 7vh;
+    height: 7vh;
+}
+
+.select {
+    background-color: rgb(27,40,56);
+    margin-right: 1vw;
+    font-size: 17px;
+    padding: 0 2vw;
+    cursor: pointer;
+}
+.select:hover {
+    background-image: linear-gradient(to right, rgb(53,110,148) , rgb(32,73,106));
+}
+
+.search {
+    display: flex;
+    line-height: 7vh;
+    height: 7vh;
+}
+
+.searchInput {
+    border-radius: 4px 0 0 4px;
+    border-style: solid;
+    margin: 1vh 0;
+}
+
+.searchButton {
+    cursor: pointer;
+    background-color: rgb(27,40,56);
+    border-radius: 0 4px 4px 0;
+    font-size: 16px;
+    padding: 0 1vw;
+    margin: 1vh 0;
+    line-height: 5vh;
+    color: rgba(255,255,255,0.9);
+
+}
+.searchButton:hover {
+    background-image: linear-gradient(to right, rgb(53,110,148) , rgb(32,73,106));
 }
