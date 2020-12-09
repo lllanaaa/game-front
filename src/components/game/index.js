@@ -1,5 +1,6 @@
 import  React, { Component, createElement, useState } from 'react';
 import { Row, Col, Button, Spin, Rate } from 'antd'
+import { Modal, Space } from 'antd';
 import 'antd/dist/antd.css';
 import Header from "../header";
 import Footer from "../footer";
@@ -39,6 +40,11 @@ const Editor = ({ onChange, onSubmit, submitting, value, rate, handleRateChange 
     </>
 );
 
+function success() {
+    Modal.success({
+        content: '加入愿望单成功',
+    });
+}
 
 
 class Game extends Component {
@@ -97,6 +103,7 @@ class Game extends Component {
 
     }
 
+
     onClickAdd = () => {
 
         const gameId = parseInt(this.props.location.search.match(/\d+/gi).toString());
@@ -105,6 +112,7 @@ class Game extends Component {
         addUserList(userId, gameId).then( (res)=>{
             if(res.data.code === 200) {
                 console.log("请求成功")
+                success()
             }else{
                 console.log("请求失败")
             }
