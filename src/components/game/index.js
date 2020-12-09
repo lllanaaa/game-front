@@ -9,6 +9,7 @@ import 'video-react/dist/video-react.css';
 import { Comment, Avatar, Form, List, Input, Tooltip } from 'antd';
 import moment from 'moment';
 import './index.css'
+import videoDefault from "../../source/video/只狼.mp4"
 
 const { TextArea } = Input;
 
@@ -37,6 +38,7 @@ const Editor = ({ onChange, onSubmit, submitting, value, rate, handleRateChange 
         </Form.Item>
     </>
 );
+
 
 
 class Game extends Component {
@@ -244,8 +246,10 @@ class Game extends Component {
                             <Row>
                                 <Col span={14}>
                                     <div style={{backgroundColor: "lightBlue"}}>
-                                        <Player>
-                                            <source src={this.state.mvUrl} />
+                                        <Player
+                                            autoPlay={true}
+                                        >
+                                            <source src={videoDefault} />
                                         </Player>
                                     </div>
                                 </Col>
@@ -332,6 +336,78 @@ class Game extends Component {
                     </Row>
 
                 </div>
+
+                <div>
+
+                    <Row>
+                        <Col span={5}></Col>
+                        <Col span={9} style={{marginTop: "40px"}}>
+                            <Row>
+                                关于此内容
+                            </Row>
+                            <Row style={{marginTop: "10px"}}>
+                                <div>
+                                    《火柴人联盟2》为《火柴人联盟》的正统续作，同为横版动作游戏，但又和一代作品截然不同：
+                                </div>
+                                <div>
+                                    一、更帅的战斗系统：
+                                    1.新增了跳跃，空中连击，战斗自由度更高。
+                                    2.新增了台阶，和地形变化，场景将不再单调，后期还会有丰富的机关系统。
+                                    3.更帅的动作设计，更好的操作手感，更华丽的连招。
+                                </div>
+                                <div>
+                                    二、更多独具特色的英雄：
+                                    1.每个英雄的操作体验截然不同,更加具有自己的特色，不同组合感受更为不同。
+                                    2.每个月会新增一个英雄，最后目标是100个全新英雄！！
+                                </div>
+                                <div>
+                                    三、更多丰富的功能和玩法
+                                    试炼之地（主线管卡）、魔窟（可成长BOSS）、竞技场（和众多玩家PK）、符文之塔（无限刷符文）、矿洞（可离线收集各种资源）等各种全新系统等你探索。
+                                </div>
+                            </Row>
+
+                            <Row style={{marginTop: "40px"}}>
+                                系统需求
+                            </Row>
+                            <Row style={{marginTop: "10px"}}>
+                                <Col span={12}>
+                                    <div>最低配置</div>
+                                    <div>需要 64 位处理器和操作系统</div>
+                                    <div>操作系统: Windows® 7 / Windows® 8.1 / Windows® 10 64-bit (latest Service Pack)</div>
+                                    <div>处理器: Intel® Core™ i3 3250 3.5 GHz or Intel Pentium G4560 3.5 GHz / AMD FX-4350 4.2 GHz</div>
+                                    <div>内存: 6 GB RAM</div>
+                                    <div>显卡: NVIDIA® GeForce® GTX 660 2GB or GTX 1050 2GB / AMD Radeon HD 7850 2GB</div>
+                                    <div>网络: 宽带互联网连接</div>
+                                    <div>存储空间: 需要 105 GB 可用空间</div>
+                                </Col>
+                                <Col span={12}>
+                                    <div>推荐配置</div>
+                                    <div>需要 64 位处理器和操作系统</div>
+                                    <div>操作系统: System Windows® 7 / Windows® 8.1 / Windows® 10 64-bit (latest Service Pack)</div>
+                                    <div>处理器: Processor Intel® Core™ i5 2400 3.4 GHz or i5 7400 3.5 GHz / AMD Ryzen R5 1600X 3.6 GHz</div>
+                                    <div>内存: 8 GB RAM</div>
+                                    <div>显卡: Video NVIDIA® GeForce® GTX 970 4GB or GTX 1060 6GB / AMD R9 390 8GB Memory 8 GB RAM</div>
+                                    <div>网络: 宽带互联网连接</div>
+                                    <div>存储空间: 需要 105 GB 可用空间</div>
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col span={2}>
+
+                        </Col>
+                        <Col span={5}>
+                            <div>单人</div>
+                            <div>线上玩家对线</div>
+                            <div>在线合作</div>
+                            <div>DLC</div>
+                            <div>steamX成就</div>
+                            <div>完全支持控制器</div>
+                            <div>应用内购买</div>
+                        </Col>
+                    </Row>
+
+                </div>
+
 
                 <div style={{marginTop: "100px"}}>
                     {/*评论标题显示*/}
