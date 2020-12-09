@@ -9,7 +9,6 @@ import { Player, ControlBar } from 'video-react';
 import 'video-react/dist/video-react.css';
 import { Comment, Avatar, Form, List, Input, Tooltip } from 'antd';
 import moment from 'moment';
-import './index.css'
 import '../header/index.scss'
 import './index.scss'
 import videoDefault from "../../source/video/只狼.mp4"
