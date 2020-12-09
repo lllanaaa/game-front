@@ -1,15 +1,38 @@
 .leftArrow {
-  position: absolute;
-  z-index: 100;
-  left: 30px;
-  top: 40%;
-  cursor: pointer;
+    position: absolute;
+    z-index: 100;
+    left: 0px;
+    top: 25vh;
+    cursor: pointer;
 }
 
 .rightArrow {
-  position: absolute;
-  z-index: 100;
-  right: 30px;
-  top: 40%;
-  cursor: pointer;
+    position: absolute;
+    z-index: 100;
+    right: 0px;
+    top: 25vh;
+    cursor: pointer;
+}
+
+.leftOutlined {
+    color:#fff;
+    font-size: 40px;
+    width: 4vw;
+    height: 16vh;
+    line-height: 16vh;
+    background-image: linear-gradient(to right, rgb(141, 56, 6), rgba(163, 38, 38, 0) );
+}
+.leftOutlined:hover {
+    background-image: linear-gradient(to right, rgb(216, 98, 30), rgba(163, 38, 38, 0) );
+}
+.rightOutlined {
+    color:#fff;
+    font-size: 40px;
+    width: 4vw;
+    height: 16vh;
+    line-height: 16vh;
+    background-image: linear-gradient(to right,  rgba(163, 38, 38, 0),rgb(112, 57, 201) );
+}
+.rightOutlined:hover {
+    background-image: linear-gradient(to right,  rgba(163, 38, 38, 0),rgb(151, 113, 211) );
 }

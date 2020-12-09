@@ -1,5 +1,5 @@
-import  React, { Component, createElement, useState } from 'react';
-import { Row, Col, Button, Spin, Rate } from 'antd'
+import  React, { Component, Fragment, useState } from 'react';
+import { Row, Col, Button, Spin, Rate, message } from 'antd'
 import { Modal, Space } from 'antd';
 import 'antd/dist/antd.css';
 import Header from "../header";
@@ -10,7 +10,10 @@ import 'video-react/dist/video-react.css';
 import { Comment, Avatar, Form, List, Input, Tooltip } from 'antd';
 import moment from 'moment';
 import './index.css'
+import '../header/index.scss'
+import './index.scss'
 import videoDefault from "../../source/video/只狼.mp4"
+import UserDefault from '../../source/user_pic/user.png'
 
 const { TextArea } = Input;
 
@@ -42,7 +45,7 @@ const Editor = ({ onChange, onSubmit, submitting, value, rate, handleRateChange 
 
 function success() {
     Modal.success({
-        content: '加入愿望单成功',
+        content: '加入购物车成功',
     });
 }
 
@@ -107,14 +110,15 @@ class Game extends Component {
     onClickAdd = () => {
 
         const gameId = parseInt(this.props.location.search.match(/\d+/gi).toString());
-        const userId = JSON.parse(localStorage.getItem('loginObj')).userId
+        const userId = JSON.parse(localStorage.getItem('loginObj'))['userId']
 
-        addUserList(userId, gameId).then( (res)=>{
+        addUserList(gameId, userId).then( (res)=>{
             if(res.data.code === 200) {
                 console.log("请求成功")
                 success()
             }else{
                 console.log("请求失败")
+                message.info("商品已在购物车或已购买~")
             }
         }).catch( (error)=>{
         });
@@ -131,8 +135,8 @@ class Game extends Component {
 
     handleSubmit = () => {
 
-        const userId = JSON.parse(localStorage.getItem('loginObj')).userId;
-        const userName = JSON.parse(localStorage.getItem('loginObj')).userName;
+        const userId = JSON.parse(localStorage.getItem('loginObj'))['userId'];
+        const userName = JSON.parse(localStorage.getItem('loginObj'))['userName'];
 
         if (!this.state.value || !this.state.rate) {
             return;
@@ -159,7 +163,7 @@ class Game extends Component {
                 comments: [
                     {
                         author: userName,
-                        avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+                        avatar: UserDefault,
                         content: <p>{this.state.value}</p>,
                         datetime: moment().fromNow(),
                     },
@@ -185,8 +189,10 @@ class Game extends Component {
             return '褒贬不一'
         } else if(this.state.score >= 3.5 && this.state.score < 4) {
             return '多半好评'
-        } else {
+        } else if(this.state.score >= 4 && this.state.score <4.5){
             return '特别好评'
+        }else {
+            return '好评如潮'
         }
 
     };
@@ -203,7 +209,7 @@ class Game extends Component {
                             author={<a>{item.userName}</a>}
                             avatar={
                                 <Avatar
-                                    src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
+                                    src={UserDefault}
                                     alt=""
                                 />
                             }
@@ -231,254 +237,240 @@ class Game extends Component {
 
         return (
             <div>
-                <div style={{ backgroundColor:"#242400",color:"#fff",position:"fixed",zIndex:10,top:"0",width:"100%" }}>
+                <div className='header'>
                     <Header />
                 </div>
-
-                <div>
+                <div className='gameContent'>
                     <Row>
-                        <Col span={2}></Col>
-                        <Col span={12}>
-                            <div className='song-content-rightHeader' style={{marginTop: 30}}>
-                                <span className='song-content-rightHeader-name'>{this.state.gameName}</span>
-                            </div>
-                        </Col>
-                        <Col span={10}></Col>
-                    </Row>
-                </div>
-
-                <div style={{marginTop: "150px"}}>
-                    <Row>
-                        <Col span={5}></Col>
-                        <Col span={14}>
-                            <Row>
-                                <Col span={14}>
-                                    <div style={{backgroundColor: "lightBlue"}}>
+                        <Col span={3}></Col>
+                        <Col span={18}>
+                            <h1 className='gameTitle'>{this.state.gameName}</h1>
+                            <Row className='gameContentWrapper'>
+                                <Col span={15}>{/* 视频、价格、添加至购物车 */}
+                                    <Row>
                                         <Player
                                             autoPlay={true}
                                         >
                                             <source src={videoDefault} />
                                         </Player>
-                                    </div>
+                                    </Row>
+                                    <Row>
+                                        <Col span={12}>
+                                            <Row className='gamePriceWrapper'>
+                                                {
+                                                    this.state.discount === 0?
+                                                    <span className='gamePrice'>
+                                                        <div className='nodiscountGamePrice'>¥{this.state.price}</div>
+                                                    </span>
+                                                    :<Row>
+                                                        <span className='gameDiscount'>-{this.state.discount*100}%</span>
+                                                        <span className='gamePrice'>
+                                                            <div className='originGamePrice'>¥{this.state.price}</div>
+                                                            <div className='nowGamePrice'>¥{Math.ceil(this.state.price*(1-this.state.discount)*100)/100}</div>
+                                                        </span>
+                                                    </Row>
+                                                }
+                                            </Row>
+                                        </Col>
+                                        <Col span={12}>
+                                            <Row className='gameAddWrapper'>
+                                                {   
+                                                    localStorage.getItem('loginObj')?
+                                                    <div className='add' onClick={this.onClickAdd}>添加至您的购物车</div>
+                                                    :<Spin/>
+                                                }
+                                            </Row>
+                                        </Col>
+                                    </Row>
                                 </Col>
-                                <Col span={9} offset={1}>
-                                    <div style={{marginLeft:"10px"}}>
-                                        <Row>
-                                            <div className='song-logo-img'>
-                                                <img src={this.state.picUrl} alt="" style={{width: "350px"}}/>
-                                            </div>
-                                        </Row>
-                                        <Row>
-                                            <div className='description' style={{marginTop: "10px", width: "550px"}}>
-                                                {this.state.description}
-                                            </div>
-                                        </Row>
-                                        <Row>
-                                            <div className='song-content-singer' style={{marginTop:"10px"}}>
-                                                <span style={{ fontSize:"12px" }}>评测内容:</span>
-                                                <span style={{ marginLeft:"5px", fontSize:"12px", color:"#2273C2" }}>
+                                <Col span={9} style={{ paddingLeft:'1.5vw' }}>{/* 游戏简介 */}
+                                    <Row>
+                                        <img src={this.state.picUrl} alt="" style={{width:'100%',height:'25vh'}}/>
+                                    </Row>
+                                    <Row>
+                                        <div className='gameDescription'>{this.state.description}</div>
+                                    </Row>
+                                    <Row>
+                                        <span className='gameContentLeft'>评测内容&nbsp;:&nbsp;</span>
+                                        <span className='gameContentRight'>{this.rateDescription()}</span>
+                                    </Row>
+                                    <Row>
+                                        <span className='gameContentLeft'>发行商&nbsp;:&nbsp;</span>
+                                        <span className='gameContentRight'>{this.state.publisher}</span>
+                                    </Row>
+                                    <Row>
+                                        <span className='gameContentLeft'>发行时间&nbsp;:&nbsp;</span>
+                                        <span className='gameContentRight'>{this.state.publishTime}</span>
+                                    </Row>
+                                    <Row>
                                         {
-                                            this.rateDescription()
+                                            this.state.labels.map( (item,index) => {
+                                                return(
+                                                    <Fragment key={index}>
+                                                        <span style={{ marginTop:'3vh',backgroundColor:'rgb(67,126,160)',padding:'0.5vh 0.5vw',borderRadius:'2px',marginRight:'0.5vw',color:' rgb(198,212,233)' }}>
+                                                            {item}
+                                                        </span>
+                                                    </Fragment>
+                                                )
+                                            })}
+                                    </Row>
+                                </Col>
+                            </Row>
+                            <Row style={{ marginTop:'8vh' }}>
+                                <Col span={15}>
+                                    <Row>
+                                        <Row style={{ width:'100%',color:'rgba(255,255,255,0.9)',fontSize:'18px' }}>关于此内容</Row>
+                                        <div className='line'></div>
+                                    </Row>
+                                    <Row style={{ color:'#acb2b8' }}>
+                                        <div style={{ margin:'1.5vh 0' }}>
+                                            《火柴人联盟2》为《火柴人联盟》的正统续作，同为横版动作游戏，但又和一代作品截然不同：
+                                        </div>
+                                        <div style={{ margin:'1.5vh 0',width:'100%' }}>
+                                            一、更帅的战斗系统：
+                                        </div>
+                                        <div style={{ margin:'1.5vh 0 0.5vh 0',width:'100%' }}>
+                                            1.新增了跳跃，空中连击，战斗自由度更高。
+                                        </div>
+                                        <div style={{ margin:'0.5vh 0',width:'100%' }}>
+                                            2.新增了台阶，和地形变化，场景将不再单调，后期还会有丰富的机关系统。
+                                        </div>
+                                        <div style={{ margin:'0.5vh 0 1.5vh 0',width:'100%' }}>
+                                            3.更帅的动作设计，更好的操作手感，更华丽的连招。
+                                        </div>
+                                        <div style={{ margin:'1.5vh 0',width:'100%' }}>
+                                            二、更多独具特色的英雄：
+                                        </div>
+                                        <div style={{ margin:'1.5vh 0 0.5vh 0',width:'100%' }}>
+                                            1.每个英雄的操作体验截然不同,更加具有自己的特色，不同组合感受更为不同。
+                                        </div>
+                                        <div style={{ margin:'0.5vh 0 1.5vh 0',width:'100%' }}>
+                                            2.每个月会新增一个英雄，最后目标是100个全新英雄！！
+                                        </div>
+                                        <div style={{ margin:'1.5vh 0',width:'100%' }}>
+                                            三、更多丰富的功能和玩法
+                                        </div>
+                                        <div style={{ margin:'1.5vh 0 8vh 0',width:'100%' }}>
+                                            试炼之地（主线管卡）、魔窟（可成长BOSS）、竞技场（和众多玩家PK）、符文之塔（无限刷符文）、矿洞（可离线收集各种资源）等各种全新系统等你探索。
+                                        </div>
+                                    </Row>
+                                    <Row>
+                                        <Row style={{ width:'100%',color:'rgba(255,255,255,0.9)',fontSize:'18px' }}>系统需求</Row>
+                                        <div className='line'></div>
+                                    </Row>
+                                    <Row>
+                                        <Col span={11} className='systemWrapper'>
+                                            <Row style={{ fontSize:'8px',color:'#acb2b8' }}>最低配置</Row>
+                                            <Row className='systemRight'>需要 64 位处理器和操作系统</Row>
+                                            <Row>
+                                                <span className='systemLeft'>操作系统 : </span>
+                                                <span className='systemRight'>Windows® 7 / Windows® 8.1 / Windows® 10 64-bit (latest Service Pack)</span>
+                                            </Row>
+                                            <Row>
+                                                <span className='systemLeft'>处理器 : </span>
+                                                <span className='systemRight'>Intel® Core™ i3 3250 3.5 GHz or Intel Pentium G4560 3.5 GHz / AMD FX-4350 4.2 GHz</span>
+                                            </Row>
+                                            <Row>
+                                                <span className='systemLeft'>内存 : </span>
+                                                <span className='systemRight'>6 GB RAM</span>
+                                            </Row>
+                                            <Row>
+                                                <span className='systemLeft'>显卡 : </span>
+                                                <span className='systemRight'>NVIDIA® GeForce® GTX 660 2GB or GTX 1050 2GB / AMD Radeon HD 7850 2GB</span>
+                                            </Row>
+                                            <Row>
+                                                <span className='systemLeft'>网络 : </span>
+                                                <span className='systemRight'>宽带互联网连接</span>
+                                            </Row>
+                                            <Row>
+                                                <span className='systemLeft'>存储空间 : </span>
+                                                <span className='systemRight'>需要 105 GB 可用空间</span>
+                                            </Row>
+                                        </Col>
+                                        <Col span={2}></Col>
+                                        <Col span={11} className='systemWrapper'>
+                                            <Row style={{ fontSize:'8px',color:'#acb2b8' }}>推荐配置</Row>
+                                            <Row className='systemRight'>需要 64 位处理器和操作系统</Row>
+                                            <Row>
+                                                <span className='systemLeft'>操作系统 : </span>
+                                                <span className='systemRight'>System Windows® 7 / Windows® 8.1 / Windows® 10 64-bit (latest Service Pack)</span>
+                                            </Row>
+                                            <Row>
+                                                <span className='systemLeft'>处理器 : </span>
+                                                <span className='systemRight'>Processor Intel® Core™ i5 2400 3.4 GHz or i5 7400 3.5 GHz / AMD Ryzen R5 1600X 3.6 GHz</span>
+                                            </Row>
+                                            <Row>
+                                                <span className='systemLeft'>内存 : </span>
+                                                <span className='systemRight'>8 GB RAM</span>
+                                            </Row>
+                                            <Row>
+                                                <span className='systemLeft'>显卡 : </span>
+                                                <span className='systemRight'>Video NVIDIA® GeForce® GTX 970 4GB or GTX 1060 6GB / AMD R9 390 8GB Memory 8 GB RAM</span>
+                                            </Row>
+                                            <Row>
+                                                <span className='systemLeft'>网络 : </span>
+                                                <span className='systemRight'>宽带互联网连接</span>
+                                            </Row>
+                                            <Row>
+                                                <span className='systemLeft'>存储空间 : </span>
+                                                <span className='systemRight'>需要 105 GB 可用空间</span>
+                                            </Row>
+                                        </Col>
+                                    </Row>
+                                </Col>
+                                <Col span={9}>
+                                    <Row className='otherWrapper'>
+                                        <div className='otherContent'>单人</div>
+                                        <div className='otherContent'>线上玩家对线</div>
+                                        <div className='otherContent'>在线合作</div>
+                                        <div className='otherContent'>DLC</div>
+                                        <div className='otherContent'>steamX成就</div>
+                                        <div className='otherContent'>完全支持控制器</div>
+                                        <div className='otherContent'>应用内购买</div>
+                                    </Row>
+                                </Col>
+                            </Row>
+                            <Row style={{ marginTop:'8vh' }}>
+                                <Row style={{ width:'100%',color:'rgba(255,255,255,0.9)',fontSize:'18px',height:'5vh' }}>
+                                    <span style={{ lineHeight:'5vh' }}>评论</span>
+                                    <span style={{ color:'rgba(255,255,255,0.5)',fontSize:'14px',marginLeft:'3vw',lineHeight:'5vh' }}>共{this.state.reviewNum}条</span>
+                                </Row>
+                                <div className='line'></div>
+                                <Row style={{ backgroundColor:'rgba(198,212,233,0.6)',paddingLeft:'2vw',width:'100%',marginTop:'3vh' }}>
+                                    {
+                                        comments.length > 0 && <CommentList comments={comments} />
+                                    }
+                                </Row>
+                                <Row style={{ width:'100%',marginBottom:'10vh' }}>
+                                    <Comment
+                                        style={{ padding:'3vh 2vw 0 2vw',width:'100%',backgroundImage:'linear-gradient(rgba(198,212,233,0.6),rgb(67,126,160,0.3))'}}
+                                        avatar={
+                                            <Avatar
+                                                src={UserDefault}
+                                                alt=""
+                                            />
                                         }
-                                    </span>
-                                            </div>
-                                        </Row>
-                                        <Row>
-                                            <div className='song-content-singer' style={{marginTop:"10px"}}>
-                                                <span style={{ fontSize:"12px" }}>发行商:</span>
-                                                <span style={{ marginLeft:"5px", fontSize:"12px", color:"#2273C2" }}>{this.state.publisher}</span>
-                                            </div>
-                                        </Row>
-                                        <Row>
-                                            <div className='song-content-belongAlbum' style={{marginTop:"10px"}}>
-                                                <span style={{ fontSize:"12px" }}>发行时间:</span>
-                                                <span style={{marginLeft:"5px",fontSize:"12px",color:"#2273C2" }}>{this.state.publishTime}</span>
-                                            </div>
-                                        </Row>
-                                        <Row>
-                                            <div className='song-content-label' style={{marginTop:"10px"}}>
-                                                <span style={{ fontSize:"12px" }}>标签:</span>
-                                                {this.state.labels.map( (item) => {
-                                                    return(
-                                                        <span style={{marginLeft:"5px",fontSize:"12px",color:"#2273C2" }}>{item}</span>
-                                                    )
-                                                })}
-                                            </div>
-                                        </Row>
-                                    </div>
-                                </Col>
-
-                            </Row>
-                        </Col>
-                        <Col span={5}></Col>
-                    </Row>
-
-                </div>
-
-                <div>
-                    <Row>
-                        <Col span={5}></Col>
-                        <Col span={7}>
-                            <Row>
-                                <div className='song-content-belongAlbum' style={{marginTop:"10px"}}>
-                                    <span style={{ fontSize:"12px" }}>价格:</span>
-                                    <span style={{marginLeft:"5px",fontSize:"12px",color:"#2273C2" }}>{this.state.price}</span>
-                                    <span style={{ fontSize:"12px", marginLeft:"20px" }}>折扣:</span>
-                                    <span style={{marginLeft:"5px",fontSize:"12px",color:"#2273C2" }}>{parseInt(this.state.discount * this.state.price)}</span>
-                                </div>
-                            </Row>
-                            <Row>
-                                {localStorage.getItem('loginObj')?
-                                    <div className='add'>
-                                        <Button onClick={this.onClickAdd}>添加至您的愿望单</Button>
-                                    </div>
-                                    :
-                                    <Spin/>
-                                }
-                            </Row>
-                        </Col>
-                        <Col span={7}>
-
-                        </Col>
-                        <Col span={5}></Col>
-                    </Row>
-
-                </div>
-
-                <div>
-
-                    <Row>
-                        <Col span={5}></Col>
-                        <Col span={9} style={{marginTop: "40px"}}>
-                            <Row>
-                                关于此内容
-                            </Row>
-                            <Row style={{marginTop: "10px"}}>
-                                <div>
-                                    《火柴人联盟2》为《火柴人联盟》的正统续作，同为横版动作游戏，但又和一代作品截然不同：
-                                </div>
-                                <div>
-                                    一、更帅的战斗系统：
-                                    1.新增了跳跃，空中连击，战斗自由度更高。
-                                    2.新增了台阶，和地形变化，场景将不再单调，后期还会有丰富的机关系统。
-                                    3.更帅的动作设计，更好的操作手感，更华丽的连招。
-                                </div>
-                                <div>
-                                    二、更多独具特色的英雄：
-                                    1.每个英雄的操作体验截然不同,更加具有自己的特色，不同组合感受更为不同。
-                                    2.每个月会新增一个英雄，最后目标是100个全新英雄！！
-                                </div>
-                                <div>
-                                    三、更多丰富的功能和玩法
-                                    试炼之地（主线管卡）、魔窟（可成长BOSS）、竞技场（和众多玩家PK）、符文之塔（无限刷符文）、矿洞（可离线收集各种资源）等各种全新系统等你探索。
-                                </div>
-                            </Row>
-
-                            <Row style={{marginTop: "40px"}}>
-                                系统需求
-                            </Row>
-                            <Row style={{marginTop: "10px"}}>
-                                <Col span={12}>
-                                    <div>最低配置</div>
-                                    <div>需要 64 位处理器和操作系统</div>
-                                    <div>操作系统: Windows® 7 / Windows® 8.1 / Windows® 10 64-bit (latest Service Pack)</div>
-                                    <div>处理器: Intel® Core™ i3 3250 3.5 GHz or Intel Pentium G4560 3.5 GHz / AMD FX-4350 4.2 GHz</div>
-                                    <div>内存: 6 GB RAM</div>
-                                    <div>显卡: NVIDIA® GeForce® GTX 660 2GB or GTX 1050 2GB / AMD Radeon HD 7850 2GB</div>
-                                    <div>网络: 宽带互联网连接</div>
-                                    <div>存储空间: 需要 105 GB 可用空间</div>
-                                </Col>
-                                <Col span={12}>
-                                    <div>推荐配置</div>
-                                    <div>需要 64 位处理器和操作系统</div>
-                                    <div>操作系统: System Windows® 7 / Windows® 8.1 / Windows® 10 64-bit (latest Service Pack)</div>
-                                    <div>处理器: Processor Intel® Core™ i5 2400 3.4 GHz or i5 7400 3.5 GHz / AMD Ryzen R5 1600X 3.6 GHz</div>
-                                    <div>内存: 8 GB RAM</div>
-                                    <div>显卡: Video NVIDIA® GeForce® GTX 970 4GB or GTX 1060 6GB / AMD R9 390 8GB Memory 8 GB RAM</div>
-                                    <div>网络: 宽带互联网连接</div>
-                                    <div>存储空间: 需要 105 GB 可用空间</div>
-                                </Col>
-                            </Row>
-                        </Col>
-                        <Col span={2}>
-
-                        </Col>
-                        <Col span={5}>
-                            <div>单人</div>
-                            <div>线上玩家对线</div>
-                            <div>在线合作</div>
-                            <div>DLC</div>
-                            <div>steamX成就</div>
-                            <div>完全支持控制器</div>
-                            <div>应用内购买</div>
-                        </Col>
-                    </Row>
-
-                </div>
-
-
-                <div style={{marginTop: "100px"}}>
-                    {/*评论标题显示*/}
-                    <Row>
-                        <Col span={5}></Col>
-                        <Col span={14}>
-                            <div>
-                                                <span
-                                                    style={{ color:"#4C4C4C",fontSize:"20px",marginRight:"20px" }}
-                                                >
-                                                    评论
-                                                </span>
-                                <span
-                                    style={{ color:"#6F6F6F",fontSize:"14px" }}
-
-                                >
-                                                    共{this.state.reviewNum}条评
-                                                </span>
-                            </div>
-                        </Col>
-                        <Col span={5}></Col>
-                    </Row>
-
-                    <Row>
-                        <Col span={5}></Col>
-                        <Col span={14}>
-                            {comments.length > 0 && <CommentList comments={comments} />}
-                            <Comment
-                                avatar={
-                                    <Avatar
-                                        src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-                                        alt=""
+                                        content={
+                                            <Editor
+                                                onChange={this.handleChange}
+                                                onSubmit={this.handleSubmit}
+                                                handleRateChange={this.handleRateChange}
+                                                submitting={submitting}
+                                                value={value}
+                                                rate={rate}
+                                            />
+                                        }
                                     />
-                                }
-                                content={
-                                    <Editor
-                                        onChange={this.handleChange}
-                                        onSubmit={this.handleSubmit}
-                                        handleRateChange={this.handleRateChange}
-                                        submitting={submitting}
-                                        value={value}
-                                        rate={rate}
-                                    />
-                                }
-                            />
+                                    {showReviews}
+                                </Row>
+                            </Row>
                         </Col>
-                        <Col span={5}></Col>
+                        <Col span={3}></Col>
                     </Row>
-
-                    <Row>
-                        <Col span={5}></Col>
-                        <Col span={14}>
-                            {showReviews}
-                        </Col>
-                        <Col span={5}></Col>
-                    </Row>
-
                 </div>
-
-                <div>
+                <div className='footer'>
                     <Footer />
                 </div>
-
             </div>
         )
     }

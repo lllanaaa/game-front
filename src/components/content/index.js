@@ -2,6 +2,7 @@ import React,{ Component } from 'react';
 import {Row, Col, Card, Spin} from 'antd';
 import 'antd/dist/antd.css'
 import './index.css'
+import './index.scss'
 
 import {withRouter} from "react-router-dom";
 
@@ -15,20 +16,9 @@ class Content extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            discountGames: [
-            ],
-            recommendGames: [
-                {gameId: 1, gameName: "只狼", price: 219, discount: 0.2, picUrl: '../../source/game_pic/content_pic/1.jpg'},
-                {gameId: 2, gameName: "罪恶帝国", price: 4100, discount: 0.17, picUrl: '../../source/game_pic/content_pic/1.jpg'},
-                {gameId: 3, gameName: "糖豆人：终极淘汰赛", price: 3090, discount: 0.88, picUrl: '../../source/game_pic/content_pic/1.jpg'},
-                {gameId: 4, gameName: "When Ski Lifts Go Wrong", price: 1520, picUrl: '../../source/game_pic/content_pic/1.jpg'},
-            ],
-            lastestGames: [
-                {gameId: 7, gameName: "爬行者世界4", price: 2570, discount: 0.1, picUrl: '../../source/game_pic/content_pic/1.jpg'},
-                {gameId: 1, gameName: "只狼", price: 219, discount: 0.2, picUrl: '../../source/game_pic/content_pic/1.jpg'},
-                {gameId: 2, gameName: "罪恶帝国", price: 4100, discount: 0.17, picUrl: '../../source/game_pic/content_pic/1.jpg'},
-                {gameId: 5, gameName: "永夜之冬", price: 520, discount: 0.79, picUrl: '../../source/game_pic/content_pic/1.jpg'},
-            ]
+            discountGames: [],
+            recommendGames: [],
+            lastestGames: []
         }
     }
 
@@ -78,15 +68,30 @@ class Content extends Component {
             ?
             this.state.discountGames.map((item, index) => {
                 return (
-                    <Col span={4}>
-                        <Card
-                            hoverable
-                            cover={<img alt="" src={item.picUrl} onClick={ ()=>this.handleClick(item.gameId) }/>}
-                        >
-                            <p>{item.gameName}</p>
-                            <span style={{color:"grey",textDecoration:"line-through"}}>{item.price}</span>
-                            <span style={{fontSize: 40, marginLeft:"80px"}}>{parseInt(item.price * item.discount)}</span>
-                        </Card>
+                    <Col span={6} className='box'>
+                        <div className='wrapper' onClick={ ()=>this.handleClick(item.gameId) }>
+                            <Row>
+                                <img style={{ width:'100%',height:'30vh',borderRadius:'5px 5px 0 0' }} alt="" src={item.picUrl}/>
+                            </Row>
+                            <Row className='detail'>
+                                <Row className='name'>{item.gameName}</Row>
+                                <Row className='priceWrapper'>
+                                    {
+                                        item.discount === 0?
+                                        <span className='price'>
+                                            <div className='nodiscountPrice'>¥{item.price}</div>
+                                        </span>
+                                        :<Row>
+                                            <span className='discount'>-{item.discount*100}%</span>
+                                            <span className='price'>
+                                                <div className='originPrice'>¥{item.price}</div>
+                                                <div className='nowPrice'>¥{Math.ceil(item.price*(1-item.discount)*100)/100}</div>
+                                            </span>
+                                        </Row>
+                                    }
+                                </Row>
+                            </Row>
+                        </div>
                     </Col>
                 )
             })
@@ -97,15 +102,30 @@ class Content extends Component {
             ?
             this.state.recommendGames.map((item, index) => {
                 return (
-                    <Col span={4}>
-                        <Card
-                            hoverable
-                            cover={<img alt="" src={item.picUrl} onClick={ ()=>this.handleClick(item.gameId) }/>}
-                        >
-                            <p>{item.gameName}</p>
-                            <span style={{color:"grey",textDecoration:"line-through"}}>{item.price}</span>
-                            <span style={{fontSize: 40, marginLeft:"80px"}}>{parseInt(item.price * item.discount)}</span>
-                        </Card>
+                    <Col span={6} className='box'>
+                        <div className='wrapper' onClick={ ()=>this.handleClick(item.gameId) }>
+                            <Row>
+                                <img style={{ width:'100%',height:'30vh',borderRadius:'5px 5px 0 0' }} alt="" src={item.picUrl}/>
+                            </Row>
+                            <Row className='detail'>
+                                <Row className='name'>{item.gameName}</Row>
+                                <Row className='priceWrapper'>
+                                    {
+                                        item.discount === 0?
+                                        <span className='price'>
+                                            <div className='nodiscountPrice'>¥{item.price}</div>
+                                        </span>
+                                        :<Row>
+                                            <span className='discount'>-{item.discount*100}%</span>
+                                            <span className='price'>
+                                                <div className='originPrice'>¥{item.price}</div>
+                                                <div className='nowPrice'>¥{Math.ceil(item.price*(1-item.discount)*100)/100}</div>
+                                            </span>
+                                        </Row>
+                                    }
+                                </Row>
+                            </Row>
+                        </div>
                     </Col>
                 )
             })
@@ -116,15 +136,30 @@ class Content extends Component {
             ?
             this.state.lastestGames.map((item, index) => {
                 return (
-                    <Col span={4}>
-                        <Card
-                            hoverable
-                            cover={<img alt="" src={item.picUrl} onClick={ ()=>this.handleClick(item.gameId) }/>}
-                        >
-                            <p>{item.gameName}</p>
-                            <span style={{color:"grey",textDecoration:"line-through"}}>{item.price}</span>
-                            <span style={{fontSize: 40, marginLeft:"80px"}}>{parseInt(item.price * item.discount)}</span>
-                        </Card>
+                    <Col span={6} className='box'>
+                        <div className='wrapper' onClick={ ()=>this.handleClick(item.gameId) }>
+                            <Row>
+                                <img style={{ width:'100%',height:'30vh',borderRadius:'5px 5px 0 0' }} alt="" src={item.picUrl}/>
+                            </Row>
+                            <Row className='detail'>
+                                <Row className='name'>{item.gameName}</Row>
+                                <Row className='priceWrapper'>
+                                    {
+                                        item.discount === 0?
+                                        <span className='price'>
+                                            <div className='nodiscountPrice'>¥{item.price}</div>
+                                        </span>
+                                        :<Row>
+                                            <span className='discount'>-{item.discount*100}%</span>
+                                            <span className='price'>
+                                                <div className='originPrice'>¥{item.price}</div>
+                                                <div className='nowPrice'>¥{Math.ceil(item.price*(1-item.discount)*100)/100}</div>
+                                            </span>
+                                        </Row>
+                                    }
+                                </Row>
+                            </Row>
+                        </div>
                     </Col>
                 )
             })
@@ -132,38 +167,19 @@ class Content extends Component {
             <Spin />
 
         return (
-            <div>
-                <h3 style={{marginLeft: "180px"}}>特别优惠</h3>
-
-                <div className="site-card-wrapper" style={{marginLeft: "20px"}}>
-                    <Row gutter={16}>
-                        <Col span={4}></Col>
-                        {discount}
-                        <Col span={4}></Col>
-                    </Row>
-                </div>
-
-                <h3 style={{marginLeft: "180px"}}>为您推荐</h3>
-
-                <div className="site-card-wrapper" style={{marginLeft: "20px"}}>
-                    <Row gutter={16}>
-                        <Col span={4}></Col>
-                        {recommend}
-                        <Col span={4}></Col>
-                    </Row>
-                </div>
-
-
-                <h3 style={{marginLeft: "180px"}}>最热新品</h3>
-
-                <div className="site-card-wrapper" style={{marginLeft: "20px"}}>
-                    <Row gutter={16}>
-                        <Col span={4}></Col>
-                        {lastest}
-                        <Col span={4}></Col>
-                    </Row>
-                </div>
-
+            <div className='shoppingContent'>
+                <Row>
+                    <Col span={2}></Col>
+                    <Col span={20}>
+                        <h2 style={{ color:'rgba(255,255,255,0.9)',marginLeft:'0.5vw' }}>特别优惠</h2>
+                        <Row className='card'>{discount}</Row>
+                        <h2 style={{ color:'rgba(255,255,255,0.9)',marginLeft:'0.5vw' }}>为您推荐</h2>
+                        <Row className='card' >{recommend}</Row>
+                        <h2 style={{ color:'rgba(255,255,255,0.9)',marginLeft:'0.5vw' }}>最热新品</h2>
+                        <Row className='card' >{lastest}</Row>
+                    </Col>
+                    <Col span={2}></Col>
+                </Row>
             </div>
         )
     }

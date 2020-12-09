@@ -1,0 +1,138 @@
+.gameContent {
+    background-image: linear-gradient(rgb(42,71,94) ,rgb(27,40,56));
+    margin-top: 11vh;
+}
+
+.gameTitle {
+    color: rgba(255,255,255,0.9);
+    margin-top: 10vh;
+}
+
+.gameContentWrapper {
+    height: 70vh;
+    width: 100%;
+    background-image: linear-gradient(to bottom right, rgb(33, 76, 105) , rgb(12, 32, 49));
+}
+
+.gamePriceWrapper {
+    margin: 2.5vh 1.5vw;
+    width: 14vw;
+    height: 10vh;
+}
+
+.gameDiscount {
+    width: 8vw;
+    background-color: rgb(76,104,34);
+    color: #8bc53f;
+    font-size: 30px;
+    text-align: center;
+    line-height: 10vh;
+}
+
+.gamePrice {
+    width: 6vw;
+    background-color: rgb(12,45,60);
+    text-align: center;
+    line-height: 5vh;
+}
+
+.originGamePrice {
+    width: 6vw;
+    font-size: small;
+    color: #56707f;
+    text-decoration: line-through;
+}
+
+.nowGamePrice {
+    color: #acdbf5;
+    width: 6vw;
+    font-size: large;
+    text-align: center;
+}
+
+.nodiscountGamePrice {
+    color: #acdbf5;
+    width: 6vw;
+    font-size: large;
+    line-height: 10vh;
+    text-align: center;
+}
+
+.gameAddWrapper {
+    margin: 4vh 1.5vw;
+}
+
+.add {
+    background-color: rgb(42,71,94);
+    color: rgb(83,193,245);
+    padding: 1vh 1vw; 
+    font-size: 3vh;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.add:hover {
+    background-image: linear-gradient(to right, rgb(103,193,245) , rgb(67,126,160));
+    color: rgb(255,255,255);
+}
+
+.gameDescription {
+    margin-top: 1vh;
+    color: rgb(198,212,233);
+    font-size: 13px;
+}
+
+.gameContentLeft {
+    margin-top: 2vh;
+    font-size: 12px;
+    color: #8f98a0;
+}
+
+.gameContentRight {
+    margin-top: 2vh;
+    font-size: 12px;
+    color: rgb(83,193,245);
+    margin-left: 0.5vw;
+}
+
+.line {
+    margin-top: 1vh;
+    width: 100%;
+    background-image: linear-gradient(to right, rgb(172, 219, 245), rgba(163, 38, 38, 0) );
+    border-style: solid;
+    border-color: rgba(163, 38, 38, 0);
+    border-width: thin;
+}
+
+.systemWrapper {
+    background-color: rgb(22,32,45);
+    width: 100%;
+    margin-top: 3vh;
+    padding: 3vh 2vw;
+}
+
+.systemLeft {
+    color: #8f98a0a8;
+    font-size: 13px;
+    margin: 0.5vh 0;
+}
+
+.systemRight {
+    color:#acb2b8;
+    font-size: 13px;
+    margin: 0.5vh 0;
+}
+
+.otherWrapper {
+    background-color: rgb(22,32,45);
+    margin: 0 0 0 3vw;
+    padding: 3vh 2vw;
+}
+
+.otherContent {
+    width: 100%;
+    background-color: rgb(42,71,94);
+    color: rgb(83,193,245);
+    border-radius: 2px;
+    margin: 0.5vh 0;
+    padding: 1vh 1vw;
+}

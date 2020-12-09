@@ -33,7 +33,7 @@ class Header extends Component{
         let csrf = localStorage.getItem("token");
 
         return (
-            <div className='header-wrapper' style={{ width:"100%",backgroundColor:'rgb(23,26,33)' }}>
+            <div className='header-wrapper' style={{ width:"100%",backgroundColor:'rgb(23,26,33)',position:'fixed',zIndex:'1000' }}>
                 <Row>
                     <Col span={8}>
                         <div className='title'>steamX</div>

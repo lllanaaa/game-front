@@ -33,6 +33,7 @@ class MyCart extends Component{
         let userId = JSON.parse(localStorage.getItem("loginObj"))['userId']
         getMyCartInfo(userId).then( (res)=>{
             if(res.data.code === 200) {
+                console.log(res.data)
                 this.setState({
                     goods: res.data.games,
                     totalAmount: res.data.totalAmount
@@ -91,7 +92,7 @@ class MyCart extends Component{
                 this.setState({
                     buyVisible:false
                 })
-                this.props.history.push(`/myGame`)
+                this.props.history.push(`/user/myGame`)
             }else {
                 console.log("网络出问题")
             }

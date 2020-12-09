@@ -54,7 +54,7 @@ class Banner extends Component {
             ?
             this.state.banners.map( (item, index) => {
                 return (
-                    <div className={`indexBanner`} key={item.picUrl} style={{height:"300px"}}>
+                    <div className={`indexBanner`} key={item.picUrl}>
                         <div>
                             {
                                 item.picUrl
@@ -63,7 +63,7 @@ class Banner extends Component {
                                         src={item.picUrl}
                                         alt={item.name}
                                         onClick={ ()=>this.handleClick(item.id) }
-                                        style={{ width:"730px",height:"300px",margin:'0 auto',cursor:"pointer" }}
+                                        style={{ width:"52vw",height:"50vh",margin:'8vh auto',cursor:"pointer" }}
                                     />
                                     :
                                     <Spin />
@@ -77,14 +77,14 @@ class Banner extends Component {
 
 
         return (
-            <div style={{ position:"relative",paddingTop:"30px",minWidth:"990px", marginTop:"30px"}} className={`indexBanner${this.state.indexBanners}`}>
+            <div style={{ width:'100%'}} className={`indexBanner${this.state.indexBanners}`}>
                 <Row>
-                    <Col span={4}></Col>
-                    <Col span={16}>
-                        <div style={{ height:"336px" }}>
+                    <Col span={5}></Col>
+                    <Col span={14}>
+                        <div style={{ height:'66vh' }}>
 
                             <div className='leftArrow' onClick={ ()=>this.prevImg() }>
-                                <LeftOutlined style={{ fontSize:"40px",color:"#fff",width:"40px",height:"70px" }}/>
+                                <LeftOutlined className='leftOutlined'/>
                             </div>
 
                             <Carousel
@@ -100,12 +100,12 @@ class Banner extends Component {
                             </Carousel>
 
                             <div className='rightArrow' onClick={ ()=>this.nextImg() }>
-                                <RightOutlined style={{ fontSize:"40px",color:"#fff",width:"40px",height:"70px" }}/>
+                                <RightOutlined className='rightOutlined'/>
                             </div>
 
                         </div>
                     </Col>
-                    <Col span={4}></Col>
+                    <Col span={5}></Col>
                 </Row>
             </div>
         )
