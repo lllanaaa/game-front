@@ -1,0 +1,13 @@
+.description {
+    display: block;
+    display: -webkit-box;
+    max-width: 800px;
+    height: 109.2px;
+    margin: 0 auto;
+    font-size: 13px;
+    line-height: 1.4;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

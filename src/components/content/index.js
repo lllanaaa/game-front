@@ -16,10 +16,6 @@ class Content extends Component {
         super(props);
         this.state = {
             discountGames: [
-                {gameId: 7, gameName: "爬行者世界4", price: 2570, discount: 0.1, picUrl: 'https://i.niupic.com/images/2020/12/07/958v.jpg'},
-                {gameId: 2, gameName: "罪恶帝国", price: 4100, discount: 0.17, picUrl: '../../source/game_pic/content_pic/1.jpg'},
-                {gameId: 1, gameName: "只狼", price: 219, discount: 0.2, picUrl: '../../source/game_pic/content_pic/1.jpg'},
-                {gameId: 6, gameName: "月牙楼风云", price: 1520, discount: 0.2, picUrl: '../../source/game_pic/content_pic/1.jpg'},
             ],
             recommendGames: [
                 {gameId: 1, gameName: "只狼", price: 219, discount: 0.2, picUrl: '../../source/game_pic/content_pic/1.jpg'},
@@ -39,7 +35,9 @@ class Content extends Component {
     componentDidMount() {
         getSongDiscount().then( (res)=>{
             if(res.data.code === 200) {
-                this.state.discountGames = res.data.discount;
+                this.setState({
+                    discountGames: res.data.discount
+                });
             }else{
                 console.log("请求失败")
             }
@@ -48,7 +46,9 @@ class Content extends Component {
 
         getSongRecommend().then( (res)=>{
             if(res.data.code === 200) {
-                this.state.recommendGames = res.data.recommend;
+                this.setState({
+                    recommendGames: res.data.recommend
+                });
             }else{
                 console.log("请求失败")
             }
@@ -57,7 +57,9 @@ class Content extends Component {
 
         getSongLastest().then( (res)=>{
             if(res.data.code === 200) {
-                this.state.lastestGames = res.data.lastest;
+                this.setState({
+                    lastestGames: res.data.lastest
+                });
             }else{
                 console.log("请求失败")
             }
