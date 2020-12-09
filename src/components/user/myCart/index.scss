@@ -1,5 +1,6 @@
-.content {
+.myCartContent {
     background-color: rgb(27,40,56);
+    min-height: 90vh;
 }
 
 .titleLeft {
@@ -28,6 +29,9 @@
     margin-bottom: 1vh;
     padding: 2vh;
     color: #c7d5e0;
+}
+.goods:hover {
+    background-color: rgb(23,26,33);
 }
 
 .bottom {

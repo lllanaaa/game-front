@@ -1,6 +1,6 @@
 import React,{ Component } from 'react';
 import {Menu,Dropdown, Avatar} from 'antd'
-import { ShoppingCartOutlined, SettingOutlined, LogoutOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined, SettingOutlined, LogoutOutlined,LaptopOutlined } from '@ant-design/icons';
 import 'antd/dist/antd.css'
 import { withRouter } from 'react-router-dom'
 import UserDefault from '../../source/user_pic/user.png'
@@ -16,6 +16,11 @@ class LoginMenu extends Component{
         this.props.history.push('/user/myCart')
     }
 
+    //跳转我的游戏库
+    myGame=()=>{
+        this.props.history.push('/user/myGame')
+    }
+
     //跳转个人设置
     personSetting=()=>{
         this.props.history.push('/user/setting')
@@ -27,7 +32,6 @@ class LoginMenu extends Component{
         localStorage.removeItem("loginObj")
 
         this.props.history.push("/");
-        window.location.reload(true);
     }
    
     
@@ -38,7 +42,10 @@ class LoginMenu extends Component{
                     <span><ShoppingCartOutlined /></span>
                     <span>我的购物车</span>
                 </Menu.Item>
-
+                <Menu.Item style={{ paddingLeft:"10px",paddingRight:"30px" }} onClick={ ()=>this.myGame() }>
+                    <span><LaptopOutlined /></span>
+                    <span>我的游戏库</span>
+                </Menu.Item>
                 <Menu.Item style={{ paddingLeft:"10px",paddingRight:"30px" }} onClick={ ()=>this.personSetting() }>
                     <span><SettingOutlined /></span>
                     <span>个人设置</span>

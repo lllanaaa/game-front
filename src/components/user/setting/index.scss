@@ -1,0 +1,55 @@
+.settingContent {
+    padding-top: 2vh;
+    background-color: rgb(27,40,56);
+    min-height: 90vh;
+}
+
+.settingTitleWapper {
+    background-color: rgb(23,26,33);
+    height: 12vh;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    line-height: 12vh;
+    color: rgba(255,255,255,0.9);
+}
+
+.settingTitle {
+    padding: 0 10vw 0 2vw;
+    font-size: 28px;
+}
+
+.settingChange {
+    line-height: 12vh;
+    padding: 1vh 1.5vw;
+    font-size: 20px;
+    background-color: rgb(22,32,45);
+}
+.settingChange:hover {
+    background-image: linear-gradient(to right, rgb(53,110,148) , rgb(32,73,106));
+}
+
+.settingInfoWapper {
+    background-color:rgb(22,32,45);
+    height: 20vh;
+    margin-bottom: 2vh;
+    line-height: 8vh;
+    padding: 2vh 2vw;
+    font-size: 20px;
+    color:rgb(86, 112, 127);
+}
+.settingInfoWapper:hover {
+    background-color: rgb(23,26,33);
+}
+
+.settingMailWapper {
+    background-color:rgb(22,32,45);
+    height: 12vh;
+    margin-bottom: 2vh;
+    line-height: 8vh;
+    padding: 2vh 2vw;
+    font-size: 20px;
+    color:rgb(86, 112, 127);
+}
+.settingMailWapper:hover {
+    background-color: rgb(23,26,33);
+}

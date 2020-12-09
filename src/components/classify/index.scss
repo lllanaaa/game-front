@@ -1,0 +1,80 @@
+.classifyContent {
+    background-image: linear-gradient(rgb(42,71,94) ,rgb(27,40,56));
+    min-height: 90vh;
+}
+
+.selectTitle {
+    border-radius: 10px 10px 0 0;
+    background-color: rgb(22,32,45);
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+}
+
+.selectTitleBefore {
+    background-color: rgb(22,32,45);
+    padding: 2vh 2vw;
+    color: #4f94bc;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 10px 10px 0 0 ;
+}
+.selectTitleBefore:hover {
+    color: rgba(255,255,255,0.9);
+}
+
+.selectTitleAfter {
+    background-color: rgb(27,40,56);
+    padding: 2vh 2vw;
+    color: rgba(255,255,255,0.9);
+    text-align: center;
+    border-radius: 10px 10px 0 0 ;
+}
+
+.classifyGames {
+    background-color: rgb(22,32,45);
+    width: 100%;
+    margin-bottom: 2vh;
+    cursor: pointer;
+}
+.classifyGames:hover {
+    background-image: linear-gradient(to right,#c6e6f8da 5% ,#95bcd3 95%);
+}
+
+.classifyGames .name {
+    color: #c7d5e0;
+}
+.classifyGames:hover .name {
+    color: #10161b;
+}
+
+.classifyGames .label {
+    background-color: rgb(27,40,56);
+    border-radius: 2px;
+    padding: 0.3vh 0.3vw;
+    margin-right: 0.2vw;
+    font-size: 10px;
+    color: #c7d5e09c;
+}
+
+.classifyGames .price {
+    font-size: small;
+    color: #56707f;
+    text-decoration: line-through;
+    line-height: 10vh;
+}
+
+.classifyGames .discountPrice {
+    color: #acdbf5;
+    line-height: 0vh;
+}
+.classifyGames:hover .discountPrice {
+    color: #263645;
+}
+
+.classifyGames .nodiscountPrice {
+    color: #acdbf5;
+    line-height: 15vh;
+}
+.classifyGames:hover .nodiscountPrice {
+    color: #263645;
+}

@@ -86,9 +86,6 @@ class NotLoginMenu extends Component {
         this.formRefLogin.current.validateFields().then( value => 
             login(value.mailAccount,value.mailPassword).then( (res)=>{
                 if(res.data.code === 200) {
-                    console.log(res.data)
-                    console.log(res.data.loginObj[0])
-                    console.log(res.data.loginObj[0].userId)
                     localStorage.setItem("loginObj",JSON.stringify(res.data.loginObj[0]));
                     localStorage.setItem("token",JSON.stringify(res.data.loginObj[0].userId))
                     this.setState({
@@ -133,50 +130,29 @@ class NotLoginMenu extends Component {
     };
     //注册提交触发的函数
     handleRegisterSubmit=(ev)=>{
-        console.log("我来注册了")
         this.formRefRegister.current.validateFields().then( value => 
             checkMailCode(value.registerMail,value.registerVerifyCode).then( (res)=>{
-                console.log("验证注册验证码",res)
-            })
+                console.log(value)
+                if(res.data.code === 200){
+                    register(value.nickname,value.gender,value.registerPassword,value.registerMail).then( (res)=>{
+                        if(res.data.code === 200) {
+                            this.formRefRegister.current.resetFields()
+                            message.info("注册成功~")
+                            this.switchToLogin()
+                        }else if(res.data.code === 400) {
+                            this.formRefRegister.current.resetFields()
+                            message.info("注册失败，账号已存在！")
+                            this.switchToReset()
+                        }else {
+                            console.log('网络出问题')
+                        }
+                    }).catch( errorInfo => console.log(errorInfo))
+                }else {
+                    this.formRefRegister.current.resetFields()
+                    message.info("验证码错误!")
+                }
+            }).catch( errorInfo => console.log(errorInfo))
         ).catch( errorInfo => console.log(errorInfo))
-        // this.props.form.validateFields(
-        //     ["nickname","gender","registerPassword","registerMail","registerVerifyCode"],
-        //     (err,values)=>{
-        //         if(err){
-        //             ev.preventDefault();
-        //         }else {
-        //             ev.preventDefault();
-        //             //验证注册邮箱验证码
-        //             checkMailCode(values.registerMail,values.registerVerifyCode).then( (res)=>{
-        //                 console.log("验证注册验证码",res)
-        //                 if(res.data.code === 200){
-        //                     this.props.form.resetFields()
-        //                     //注册
-        //                     register(values.nickname,values.gender,values.registerPassword,values.registerMail).then( (res)=>{
-        //                         console.log("注册",res)
-        //                         if(res.data.code === 200) {
-        //                             message.info("注册成功!")
-        //                             this.props.form.resetFields()
-        //                             this.switchToLogin()
-        //                         }else {
-        //                             message.info("注册失败,账号已存在!")
-        //                             this.props.form.resetFields()
-        //                             this.switchToReset()
-        //                         }
-        //                     }).catch( (err)=>{
-        //                         message.info("网络堵车,请重新注册嗷~")
-        //                         console.log( message )
-        //                     } )
-        //                 }else if(res.data.code === 403){
-        //                     this.props.form.resetFields()
-        //                     message.info("验证码错误!")
-        //                 }
-        //             }).catch( (err)=>{
-        //                 message.info("网络堵车,请重新获取验证码嗷~")
-        //                 console.log( message )
-        //             } )
-        //         }
-        //     })
     };
     //忘记密码，获取邮箱验证码
     handleVerifyMailCode=()=>{
@@ -197,48 +173,26 @@ class NotLoginMenu extends Component {
     };
     //忘记密码提交触发的函数
     handleResetSubmit=(ev)=>{
-        console.log("我来忘记密码修改密码了")
         this.formRefReset.current.validateFields().then( value => 
-            console.log(value) 
+            checkMailCode(value.resetVerifyMail,value.resetVerifyCode).then((res)=>{
+                if(res.data.code === 200){
+                    resetPasswordByMail(value.resetVerifyMail,value.resetPassword).then((res)=>{
+                        console.log(res.data)
+                        console.log(value)
+                        if(res.data.code === 200) {
+                            this.formRefReset.current.resetFields()
+                            message.info("修改密码成功~")
+                            this.switchToLogin()
+                        }else{
+                            console.log('网络出问题')
+                        }
+                    }).catch( errorInfo => console.log(errorInfo))
+                }else {
+                    this.formRefReset.current.resetFields()
+                    message.info("验证码错误!")
+                }
+            }).catch( errorInfo => console.log(errorInfo))
         ).catch( errorInfo => console.log(errorInfo))
-        // this.props.form.validateFields(
-        //     ["resetVerifyMail","resetVerifyCode","resetPassword"],
-        //     (err,values)=>{
-        //         if(err){
-        //             ev.preventDefault();
-        //         }else {
-        //             ev.preventDefault();
-        //             //验证邮箱验证码
-        //             checkMailCode(values.resetVerifyMail,values.resetVerifyCode).then( (res)=>{
-        //                 console.log("验证忘记密码验证码",res)
-        //                 if(res.data.code === 200){
-        //                     this.props.form.resetFields()
-        //                     //修改密码
-        //                     resetPasswordByMail(values.resetVerifyMail,values.resetPassword).then( (res)=>{
-        //                         console.log("验证忘记密码修改密码",res)
-        //                         if(res.data.code === 200) {
-        //                             message.info("修改密码成功~")
-        //                             this.props.form.resetFields()
-        //                             this.switchToLogin()
-        //                         }else {
-        //                             message.info("邮箱不存在，修改密码失败!")
-        //                             this.props.form.resetFields()
-        //                             this.switchToRegister()
-        //                         }
-        //                     }).catch( (err)=>{
-        //                         message.info("网络堵车,请重新修改密码嗷~")
-        //                         console.log( message )
-        //                     } )
-        //                 }else if(res.data.code === 403){
-        //                     this.props.form.resetFields()
-        //                     message.info("验证码错误!")
-        //                 }
-        //             }).catch( (err)=>{
-        //                 message.info("网络堵车,请重新获取验证码嗷~")
-        //                 console.log( message )
-        //             } )
-        //         }
-        //     })
     }
 
     render() {
@@ -384,7 +338,7 @@ class NotLoginMenu extends Component {
                                     name="confirmPassword"
                                     rules={[
                                         {
-                                          required: true
+                                          required: true,message:"密码不能为空"
                                         },
                                         ({ getFieldValue }) => ({
                                           validator(rule, value) {
@@ -524,7 +478,7 @@ class NotLoginMenu extends Component {
                                     name="confirmResetPassword"
                                     rules={[
                                         {
-                                          required: true
+                                          required: true,message:"密码不能为空"
                                         },
                                         ({ getFieldValue }) => ({
                                           validator(rule, value) {

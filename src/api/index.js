@@ -57,7 +57,7 @@ export const register = (nickname,gender,registerPassword,registerMail) => {
     const url = `${baseURL}/register`;
     return axios.get(url,{
         params:{
-            nickname:nickname,
+            userName:nickname,
             gender:gender,
             registerPassword:registerPassword,
             registerMail:registerMail,
@@ -73,7 +73,7 @@ export const sendMailCode = (registerMail) =>{
         params:{
             registerMail:registerMail,
         }
-    });
+    },{ withCredentials:true });
 };
 
 // 验证邮箱注册验证码
@@ -84,7 +84,7 @@ export  const checkMailCode = (registerMail,registerVerifyCode) =>{
             registerVerifyCode:registerVerifyCode,
             registerMail:registerMail,
         }
-    });
+    },{ withCredentials:true });
 };
 
 // 登录
@@ -95,7 +95,7 @@ export const login = (loginMail,loginPassword) => {
             loginMail: loginMail,
             loginPassword: loginPassword,
         }
-    });
+    },{ withCredentials:true });
 };
 
 // 忘记密码
@@ -103,7 +103,7 @@ export const resetPasswordByMail = (resetVerifyMail,resetPassword) =>{
     const url = `${baseURL}/resetPassword`;
     return axios.get(url,{
         params:{
-            resetVerifyMail: resetVerifyMail,
+            resetMail: resetVerifyMail,
             resetPassword:resetPassword,
         }
     });
@@ -140,12 +140,95 @@ export const deleteMyCartAllGame = (userId) => {
     })
 }
 
+//购买购物车所有商品
+export const buyMyCartAllGame = (userId) => {
+    const url = `${baseURL}/buyGame`;
+    return axios.get(url,{
+        params:{
+            userId: userId
+        }
+    })
+}
+
 //模糊查询搜索商品
 export const searchGame = (content) => {
     const url = `${baseURL}/search`;
     return axios.get(url,{
         params:{
             content: content
+        }
+    })
+}
+
+//修改基本信息
+export const changeInfo = (userId,userName,gender) => {
+    const url = `${baseURL}/settingInfo`;
+    return axios.get(url,{
+        params:{
+            userId:userId,
+            userName:userName,
+            gender:gender
+        }
+    })
+}
+
+//修改邮箱
+export const changeMail = (userId,mail) => {
+    const url = `${baseURL}/settingMail`;
+    return axios.get(url,{
+        params:{
+            userId:userId,
+            mail:mail
+        }
+    })
+}
+
+//修改密码
+export const changePassword = (userId,newPassword) => {
+    const url = `${baseURL}/settingPassword`;
+    return axios.get(url,{
+        params:{
+            userId:userId,
+            newPassword:newPassword
+        }
+    })
+}
+
+//验证原密码
+export const checkPassword = (userId,oldPassword) => {
+    const url = `${baseURL}/settingOldPassword`;
+    return axios.get(url,{
+        params:{
+            userId:userId,
+            oldPassword:oldPassword
+        }
+    })
+}
+
+//获取热销商品
+export const getHot = () => {
+    const url = `${baseURL}/classifyHot`;
+    return axios.get(url)
+}
+
+//获取好评商品
+export const getGood = () => {
+    const url = `${baseURL}/classifyGood`;
+    return axios.get(url)
+}
+
+//获取即将发行商品
+export const getWill = () => {
+    const url = `${baseURL}/classifyWill`;
+    return axios.get(url)
+}
+
+//获取游戏库游戏信息
+export const getMyGameInfo = (userId) => {
+    const url = `${baseURL}/myGame`;
+    return axios.get(url,{
+        params:{
+            userId: userId
         }
     })
 }

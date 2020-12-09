@@ -1,0 +1,23 @@
+.searchContent {
+    background-color: rgb(27,40,56);
+    min-height: 90vh;
+}
+
+.searchTitle {
+    background-color: rgb(22,32,45);
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    padding: 2vh 2vw;
+    color: rgba(255,255,255,0.9);
+}
+
+.searchGames {
+    background-color: rgb(22,32,45);
+    width: 100%;
+    margin-bottom: 2vh;
+    color: #c7d5e0;
+    cursor: pointer;
+}
+.searchGames:hover {
+    background-color: rgb(23,26,33);
+}

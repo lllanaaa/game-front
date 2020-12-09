@@ -1,12 +1,13 @@
 import React,{ Component,Fragment } from 'react';
 import Header from '../../../components/header/index'
 import Footer from '../../../components/footer/index'
-import {Col,Row,message} from 'antd';
+import {Col,Row,message,Modal,Button} from 'antd';
 import './index.scss'
 import {
     getMyCartInfo,
     deleteMyCartGame,
-    deleteMyCartAllGame
+    deleteMyCartAllGame,
+    buyMyCartAllGame
 } from '../../../api/index'
 
 class MyCart extends Component{
@@ -20,6 +21,7 @@ class MyCart extends Component{
             ],
             goods:[],
             totalAmount: 0,
+            buyVisible:false
         }
     }
 
@@ -56,7 +58,7 @@ class MyCart extends Component{
             }else {
                 console.log("网络出问题")
             }
-        })
+        }).catch(err=>{ console.log(err) })
     }
     removeAllGame=()=> {
         let userId = JSON.parse(localStorage.getItem("loginObj"))['userId']
@@ -67,29 +69,55 @@ class MyCart extends Component{
             }else {
                 console.log("网络出问题")
             }
+        }).catch(err=>{ console.log(err) })
+    }
+
+    onBuy=()=> {
+        this.setState({
+            buyVisible:true
         })
+    }
+    onBuyCancel=()=> {
+        this.setState({
+            buyVisible:false
+        })
+    }
+    toBuy=()=> {
+        let userId = JSON.parse(localStorage.getItem("loginObj"))['userId']
+        buyMyCartAllGame(userId).then((res)=>{
+            if(res.data.code === 200) {
+                message.info("购买成功~")
+                this.getData()
+                this.setState({
+                    buyVisible:false
+                })
+                this.props.history.push(`/myGame`)
+            }else {
+                console.log("网络出问题")
+            }
+        }).catch(err=>{ console.log(err) })
     }
 
     render(){
         const handledGoodsData = this.state.goods.map( (item,index)=>{
             return (
-                <Fragment  key={index}>
+                <Fragment  key={item.gameId}>
                     <Row className='goods'>
                         <Col span={8}>
                             <img 
                                 style={{ cursor:'pointer',width:'80%',height:'10vh',backgroundColor:'#fff' }}
                                 alt=""
                                 src={item.picUrl}
-                                // onClick={ ()=>this.navigateToGame(item.gameId) }
+                                onClick={ ()=>this.navigateToGame(item.gameId) }
                             />
                         </Col>
                         <Col span={10} style={{ lineHeight:'5vh' }}>
-                            <Row style={{ cursor:'pointer' }}>{item.gameName}</Row>
+                            <Row style={{ cursor:'pointer' }} onClick={ ()=>this.navigateToGame(item.gameId) }>{item.gameName}</Row>
                             <Row>发行于:&nbsp;{item.publishTime}</Row>
                         </Col>
                         <Col span={4} style={{ lineHeight:'5vh' }}>
                             <Row style={{ color:'#56707f',fontSize:'small',textDecoration:'line-through' }}>¥{item.price}</Row>
-                            <Row>¥{Math.ceil(item.price*item.discount*100)/100}</Row>
+                            <Row>¥{Math.ceil(item.price*(1-item.discount)*100)/100}</Row>
                         </Col>
                         <Col span={2} style={{ lineHeight:'10vh' }}>
                             <div 
@@ -107,7 +135,7 @@ class MyCart extends Component{
                 <div className='header'>
                     <Header />
                 </div>
-                <div className='content' >
+                <div className='myCartContent' >
                     <Row>
                         <Col span={6}></Col>
                         <Col className='titleLeft' span={6}>我的购物车</Col>
@@ -145,7 +173,7 @@ class MyCart extends Component{
                                         >移除所有物品</div>
                                         <div 
                                             className='toBuy'
-                                            // onClick={ ()=>this.navigateToBuy() }
+                                            onClick={ ()=>this.onBuy() }
                                         >去购买</div>
                                     </Row>
                                     :<Row>
@@ -159,10 +187,33 @@ class MyCart extends Component{
                         </Col>
                         <Col span={6}></Col>
                     </Row>
+                    <Row style={{ minHeight:'10vh' }}></Row>
                 </div>
                 <div className='footer'>
                     <Footer />
                 </div>
+                <Modal
+                    title={"购买游戏"}
+                    visible={this.state.buyVisible}
+                    onCancel={ ()=>this.onBuyCancel() }
+                    footer={[
+                        <Button
+                            type="primary"
+                            key='confirm'
+                            style={{ float:"right" }}
+                            htmlType="submit"
+                            onClick={this.toBuy}
+                        >
+                            确定
+                        </Button>,
+                        <div key='clear' style={{ clear:"both" }}></div>
+                    ]}
+                    width={350}
+                >
+                    <div style={{ textAlign:"center" }}>
+                        总计¥{Math.ceil(this.state.totalAmount*100)/100}&nbsp;,&nbsp;确定购买这些游戏吗?
+                    </div>
+                </Modal>
             </div>
         )
     }

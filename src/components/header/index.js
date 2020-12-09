@@ -10,16 +10,14 @@ class Header extends Component{
 
     constructor(props) {
         super(props);
-        this.state= {
-        }
         this.searchRef = React.createRef();
     }
 
     navigateToShoppingMall=()=> {
         this.props.history.push(`/shoppingMall`)
     }
-    navigateToSell=()=> {
-        this.props.history.push(`/sell`)
+    navigateToClassify=()=> {
+        this.props.history.push(`/classify`)
     }
     search=()=> {
         let value = this.searchRef.current.value;
@@ -38,13 +36,13 @@ class Header extends Component{
             <div className='header-wrapper' style={{ width:"100%",backgroundColor:'rgb(23,26,33)' }}>
                 <Row>
                     <Col span={8}>
-                        <div className='title'>steam</div>
+                        <div className='title'>steamX</div>
                     </Col>
                     <Col span={4}>
                         <div className='header-selectList'>
                             <span className='select' onClick={ ()=>this.navigateToShoppingMall() }>商城
                             </span>
-                            <span className='select' onClick={ ()=>this.navigateToSell() }>热销
+                            <span className='select' onClick={ ()=>this.navigateToClassify() }>分类
                             </span>
                         </div>
                     </Col>
