@@ -365,7 +365,7 @@ class Setting extends Component{
                         </Button>,
                         <div key='clear' style={{ clear:"both" }}></div>
                     ]}
-                    width={350}
+                    width={500}
                 >
                     <div style={{ textAlign:"center",paddingTop:"30px" }}>
                         <Form ref={this.formRefInfo}>
@@ -418,7 +418,7 @@ class Setting extends Component{
                         </Button>,
                         <div key='clear' style={{ clear:"both" }}></div>
                     ]}
-                    width={350}
+                    width={400}
                 >
                     <div style={{ textAlign:"center",paddingTop:"30px" }}>
                         <Form ref={this.formRefMail}>
@@ -478,7 +478,7 @@ class Setting extends Component{
                         </Button>,
                         <div key='clear' style={{ clear:"both" }}></div>
                     ]}
-                    width={350}
+                    width={400}
                 >
                     <div style={{ textAlign:"center",paddingTop:"30px" }}>
                         <Form ref={this.formRefMailNew}>

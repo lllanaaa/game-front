@@ -39,14 +39,15 @@ export const addUserList = (gameId, userId) => {
     })
 };
 
-export const addComment = (gameId, userId, content, time) => {
+export const addComment = (gameId, userId, content, time,rate) => {
     const url = `${baseURL}/addComment`;
     return axios.get(url, {
         params: {
             gameId,
             userId,
             content,
-            time
+            time,
+            rate
         }
     })
 };

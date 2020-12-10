@@ -146,7 +146,7 @@ class Game extends Component {
         });
 
         setTimeout(() => {
-            addComment(this.state.gameId, userId, this.state.value, moment().format('YYYY-MM-DD HH:mm:ss')).then( (res)=>{
+            addComment(this.state.gameId, userId, this.state.value, moment().format('YYYY-MM-DD HH:mm:ss'),this.state.rate).then( (res)=>{
                 if(res.data.code === 200) {
                     console.log("请求成功")
                 }else{
@@ -162,7 +162,7 @@ class Game extends Component {
                 comments: [
                     {
                         author: userName,
-                        avatar: UserDefault,
+                        avatar: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
                         content: <p>{this.state.value}</p>,
                         datetime: moment().fromNow(),
                     },
@@ -179,19 +179,20 @@ class Game extends Component {
     };
 
     rateDescription = () => {
-
-        if(this.state.score < 1.5) {
-            return "特别差评"
-        } else if(this.state.score >= 1.5 && this.state.score < 2.5) {
-            return "多半差评"
-        } else if (this.state.score >= 2.5 && this.state.score < 3.5) {
-            return '褒贬不一'
-        } else if(this.state.score >= 3.5 && this.state.score < 4) {
-            return '多半好评'
-        } else if(this.state.score >= 4 && this.state.score <4.5){
-            return '特别好评'
-        }else {
+        if(this.state.score > 4.5) {
             return '好评如潮'
+        }else if(this.state.score >=4){
+            return '特别好评'
+        }else if(this.state.score >=3){
+            return '多半好评'
+        }else if(this.state.score >=2.5){
+            return '褒贬不一'
+        }else if(this.state.score >=2){
+            return '多半差评'
+        }else if(this.state.score >=1){
+            return '特别差评'
+        }else{
+            return '极不推荐'
         }
 
     };
@@ -276,7 +277,7 @@ class Game extends Component {
                                                 {   
                                                     localStorage.getItem('loginObj')?
                                                     <div className='add' onClick={this.onClickAdd}>添加至您的购物车</div>
-                                                    :<Spin/>
+                                                    :null
                                                 }
                                             </Row>
                                         </Col>

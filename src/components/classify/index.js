@@ -72,6 +72,7 @@ class Classify extends Component{
         })
         getGood().then((res)=>{
             if(res.data.code === 200){
+                console.log(res.data)
                 this.setState({
                     classifyList: res.data.good,
                     classifySelect: 1
