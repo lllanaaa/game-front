@@ -62,8 +62,8 @@ class Game extends Component {
             labels: [],
             price: 0,
             description: null,
-            discount: 0.2,
-            reviewNum: 10,
+            discount: 0,
+            reviewNum: 0,
             reviews: [],
             score: 0,
             mvUrl: "",
@@ -442,26 +442,29 @@ class Game extends Component {
                                     }
                                 </Row>
                                 <Row style={{ width:'100%',marginBottom:'10vh' }}>
-                                    <Comment
-                                        style={{ padding:'3vh 2vw 0 2vw',width:'100%',backgroundImage:'linear-gradient(rgba(198,212,233,0.6),rgb(67,126,160,0.3))'}}
-                                        avatar={
-                                            <Avatar
-                                                src={UserDefault}
-                                                alt=""
-                                            />
-                                        }
-                                        content={
-                                            <Editor
-                                                onChange={this.handleChange}
-                                                onSubmit={this.handleSubmit}
-                                                handleRateChange={this.handleRateChange}
-                                                submitting={submitting}
-                                                value={value}
-                                                rate={rate}
-                                            />
-                                        }
-                                    />
-                                    {showReviews}
+                                    {
+                                        localStorage.getItem('loginObj')?
+                                        <span style={{ width:'100%'}}><Comment
+                                            style={{ padding:'3vh 2vw 0 2vw',width:'100%',backgroundImage:'linear-gradient(rgba(198,212,233,0.6),rgb(67,126,160,0.3))'}}
+                                            avatar={
+                                                <Avatar
+                                                    src={UserDefault}
+                                                    alt=""
+                                                />
+                                            }
+                                            content={
+                                                <Editor
+                                                    onChange={this.handleChange}
+                                                    onSubmit={this.handleSubmit}
+                                                    handleRateChange={this.handleRateChange}
+                                                    submitting={submitting}
+                                                    value={value}
+                                                    rate={rate}
+                                                />
+                                            }
+                                        />
+                                        {showReviews}</span>:null
+                                    }
                                 </Row>
                             </Row>
                         </Col>
