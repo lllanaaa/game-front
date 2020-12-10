@@ -307,7 +307,7 @@ class Game extends Component {
                                             this.state.labels.map( (item,index) => {
                                                 return(
                                                     <Fragment key={index}>
-                                                        <span style={{ marginTop:'3vh',backgroundColor:'rgb(67,126,160)',padding:'0.5vh 0.5vw',borderRadius:'2px',marginRight:'0.5vw',color:' rgb(198,212,233)' }}>
+                                                        <span style={{ marginTop:'3vh',marginBottom:'3vh',backgroundColor:'rgb(67,126,160)',padding:'0.5vh 0.5vw',borderRadius:'2px',marginRight:'0.5vw',color:' rgb(198,212,233)' }}>
                                                             {item}
                                                         </span>
                                                     </Fragment>
@@ -436,7 +436,7 @@ class Game extends Component {
                                     <span style={{ color:'rgba(255,255,255,0.5)',fontSize:'14px',marginLeft:'3vw',lineHeight:'5vh' }}>共{this.state.reviewNum}条</span>
                                 </Row>
                                 <div className='line'></div>
-                                <Row style={{ backgroundColor:'rgba(198,212,233,0.6)',paddingLeft:'2vw',width:'100%',marginTop:'3vh' }}>
+                                <Row style={{ backgroundColor:'rgba(198,212,233,0.6)',paddingLeft:'2vw',paddingRight:'2vw',width:'100%',marginTop:'3vh' }}>
                                     {
                                         comments.length > 0 && <CommentList comments={comments} />
                                     }
